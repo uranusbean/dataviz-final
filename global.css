@@ -1,0 +1,25 @@
+.canvas{
+    width:100%;
+    min-height:600px;
+}
+
+/* tooltip */
+.container{
+    position:relative;
+}
+.custom-tooltip{
+    position:absolute;
+    width:180px;
+    min-height:50px;
+    padding:10px 5px;
+    background:white;
+    box-shadow: 0 2px 2px 0px rgba(0,0,0,.1);
+    top:0;
+    left:0;
+    visibility:hidden;
+    opacity:0;
+}
+    .custom-tooltip .title{
+        font-size:1.2em;
+        font-weight:bold;
+    }
