@@ -1,0 +1,12 @@
+.axis .tick line{
+    stroke:rgb(150,150,150);
+}
+
+.axis .tick line{
+    stroke-width:.5px;
+}
+
+.node{
+    stroke:black;
+    stroke-width:0px;
+}
