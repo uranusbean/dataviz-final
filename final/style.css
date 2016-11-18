@@ -1,0 +1,23 @@
+.axis .tick line{
+    stroke:rgb(150,150,150);
+}
+
+.axis .tick line{
+    stroke-width:.5px;
+}
+
+.custom-tooltip {
+    /*width: 100px;*/
+    /*height: 60px;*/
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    opacity: 1;
+    background: #eee;
+    padding: 3px;
+    text-align: center;
+}
+
+#TVBtn, #wirelessBtn, #familyBtn, #petsBtn {
+    background-color: #8c8c8c;
+    color: white;
+}
