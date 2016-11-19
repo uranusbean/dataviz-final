@@ -12,29 +12,28 @@ var plot = d3.select('.canvas')
 
 var dataSet;
 
-// var filterStatus = {
-
-//     roomTypes: {
-//         btns: d3.set()
-//     },
-//     neighbourLocations: {
-//         btns: d3.set()
-//     },
-//     cancelTypes: {
-//         btns: d3.set()
-//     },
-//     amenitiesTypes: {
-//         btns: d3.set()
-//     },
-//     familyPets: {
-//         btns: d3.set()
-//     }
-// }
-
-var roomTypes = d3.set(),
-    neighbourLocations = d3.set(),
-    cancelTypes = d3.set(),
-    amenitiesTypes = d3.set();
+var filterStatus = {
+    roomTypes: {
+        btns: d3.set(),
+        selected: d3.set()
+    },
+    neighbourLocations: {
+        btns: d3.set(),
+        selected: d3.set()
+    },
+    cancelTypes: {
+        btns: d3.set(),
+        selected: d3.set()
+    },
+    amenitiesTypes: {
+        btns: d3.set(),
+        selected: d3.set()
+    },
+    familyPets: {
+        btns: d3.set(),
+        selected: d3.set()
+    }
+}
 
 var scaleX = d3.scaleLinear()
     // .exponent(.2)   
@@ -57,6 +56,19 @@ d3.queue()
     .defer(d3.csv,'../data/airbnb.csv',parse)
     .await(dataloaded);
 
+function preprocessData(data){
+    dataSet = data;
+    dataSet = dataSet.filter(function(entry){
+        if(entry.numReviews < 2) return false;
+        if(entry.minNights == 0 || entry.minNights >31) return false;
+        if(entry.calculatedHostListing == 0) return false;
+        if(entry.minNights * entry.reviewsPerMonth > 30) return false;
+        return true;
+    });
+    
+    addButtonGroups();
+}
+
 function dataloaded(err, data){
     //Draw axis
     plot.append('g').attr('class','axis axis-x')
@@ -64,16 +76,26 @@ function dataloaded(err, data){
         .call(axisX);
     plot.append('g').attr('class','axis axis-y')
         .call(axisY);
-    dataSet = data;
-    addButtonGroups();
-    draw(data);
+    
+    preprocessData(data);
+    draw();
 } 
 
 function addButtonGroups(){
-    addButtonGroup('.btn-group-roomType', roomTypes, roomTypeBtnClickHandler);
-    addButtonGroup('.btn-group-neighbourhood', neighbourLocations, neighbourhoodBtnClickHandler);
-    addButtonGroup('.btn-group-cancelPolicy', cancelTypes, cancelPolicyBtnClickHandler);
-    // addButtonGroup('.btn-group-roomType', roomTypes, cancelPolicyBtnClickHandler);
+    addButtonGroup('.btn-group-roomType',  filterStatus.roomTypes.btns, roomTypeBtnClickHandler);
+    filterStatus.roomTypes.selected = filterStatus.roomTypes.btns; // show circles at the beginning
+    
+    addButtonGroup('.btn-group-neighbourhood', filterStatus.neighbourLocations.btns, neighbourhoodBtnClickHandler);
+    filterStatus.neighbourLocations.selected = filterStatus.neighbourLocations.btns;
+    
+    addButtonGroup('.btn-group-cancelPolicy', filterStatus.cancelTypes.btns, cancelPolicyBtnClickHandler);
+    filterStatus.cancelTypes.selected = filterStatus.cancelTypes.btns;
+    
+    addButtonGroup('.btn-group-amenities', filterStatus.amenitiesTypes.btns, amenitiesBtnClickHandler);
+    filterStatus.amenitiesTypes.selected = filterStatus.amenitiesTypes.btns;
+    
+    addButtonGroup('.btn-group-familyPets', filterStatus.familyPets.btns, familyPetsBtnClickHandler);
+    filterStatus.familyPets.selected = filterStatus.familyPets.btns;
 }
 
 function addButtonGroup(btnGroupContainer,btnNameSet,onclick) {
@@ -92,47 +114,110 @@ function addButtonGroup(btnGroupContainer,btnNameSet,onclick) {
 }
 
 function roomTypeBtnClickHandler(roomType){
-    var filteredRoomType = dataSet.filter(function(entry) {
-        return(entry.roomType == roomType);
-    });
-    draw(filteredRoomType);      
+    if (filterStatus.roomTypes.selected.has(roomType)){
+        filterStatus.roomTypes.selected.remove(roomType);
+    } else {
+        filterStatus.roomTypes.selected.add(roomType);
+    }
+  
+    if (filterStatus.roomTypes.selected.has(roomType)) {
+        d3.select(this).style('background','#337ab7');
         
-    // d3.select(this).style('background','#8c8c8c');
+    } else {
+        d3.select(this).style('background','#8c8c8c');
+    }
+    
+    draw();
 }
 
 function neighbourhoodBtnClickHandler(neighbourhood){
-    var filteredNeighbour = dataSet.filter(function(entry) {
-        return(entry.neighbourhood == neighbourhood);
-    });
-    draw(filteredNeighbour);      
+    // var filteredNeighbour = dataSet.filter(function(entry) {
+    //     return(entry.neighbourhood == neighbourhood);
+    // });
+    // draw(filteredNeighbour);      
+    if (filterStatus.neighbourLocations.selected.has(neighbourhood)){
+        filterStatus.neighbourLocations.selected.remove(neighbourhood);
+    } else {
+        filterStatus.neighbourLocations.selected.add(neighbourhood);
+    }
+  
+    if (filterStatus.neighbourLocations.selected.has(neighbourhood)) {
+        d3.select(this).style('background','#337ab7');
+    } else {
+        d3.select(this).style('background','#8c8c8c');
+    }
+    
+    draw();
 }
 
 function cancelPolicyBtnClickHandler(cancelPolicy){
-    var filteredcCncelType = dataSet.filter(function(entry) {
-        return(entry.cancelPolicy == cancelPolicy);
-    });
-    draw(filteredcCncelType);      
+    if (filterStatus.cancelTypes.selected.has(cancelPolicy)){
+        filterStatus.cancelTypes.selected.remove(cancelPolicy);
+    } else {
+        filterStatus.cancelTypes.selected.add(cancelPolicy);
+    }
+  
+    if (filterStatus.cancelTypes.selected.has(cancelPolicy)) {
+        d3.select(this).style('background','#337ab7');
+    } else {
+        d3.select(this).style('background','#8c8c8c');
+    }
+    
+    draw();
 }
 
-function draw(rows){
-    var minX = d3.min(rows, function(d){return d.monthlyIncome;}),
-        maxX = d3.max(rows, function(d){return d.monthlyIncome;}); 
+function amenitiesBtnClickHandler(amenities) {
+    if (filterStatus.amenitiesTypes.selected.has(amenities)){
+        filterStatus.amenitiesTypes.selected.remove(amenities);
+    } else {
+        filterStatus.amenitiesTypes.selected.add(amenities);
+    }
+  
+    if (filterStatus.amenitiesTypes.selected.has(amenities)) {
+        d3.select(this).style('background','#337ab7');
+    } else {
+        d3.select(this).style('background','#8c8c8c');
+    }
+    
+    draw();
+}
+
+function familyPetsBtnClickHandler(familyPets) {
+    if (filterStatus.familyPets.selected.has(familyPets)){
+        filterStatus.familyPets.selected.remove(familyPets);
+    } else {
+        filterStatus.familyPets.selected.add(familyPets);
+    }
+  
+    if (filterStatus.familyPets.selected.has(familyPets)) {
+        d3.select(this).style('background','#337ab7');
+    } else {
+        d3.select(this).style('background','#8c8c8c');
+    }
+    
+    draw();
+}
+
+function draw(){
+    var minX = d3.min(dataSet, function(d){return d.monthlyIncome;}),
+        maxX = d3.max(dataSet, function(d){return d.monthlyIncome;}); 
     var scaleIncome = d3.scaleLinear()
         .domain([minX, maxX])
         .range([1,20]);
-        
+    
+    var filteredDataSet = dataSet.filter(function(entry){
+        if(!filterStatus.roomTypes.selected.has(entry.roomType)) return false;
+        if(!filterStatus.neighbourLocations.selected.has(entry.neighbourhood)) return false;
+        if(!filterStatus.cancelTypes.selected.has(entry.cancelPolicy)) return false;
+        return true;
+    });
+    
     var node = plot.selectAll('.node')
-        .data(rows,function(d){return d.id});
+        .data(filteredDataSet,function(d){return d.id});
+        
     //ENTER
     var nodeEnter = node.enter()
         .append('circle')
-        .filter(function(d){
-            if(d.numReviews < 2) return false;
-            if(d.minNights == 0 || d.minNights >31) return false;
-            if(d.calculatedHostListing == 0) return false;
-            if (d.minNights * d.reviewsPerMonth > 30) return false;
-            return true;
-        })
         .attr('class','node')
         .attr('r', function(d){
             return scaleIncome(d.monthlyIncome);
@@ -199,35 +284,17 @@ function draw(rows){
 } 
 
 function parse(d){
-    if( !roomTypes.has(d.room_type) ){
-        roomTypes.add(d.room_type);
+    if( !filterStatus.roomTypes.btns.has(d.room_type) ){
+        filterStatus.roomTypes.btns.add(d.room_type);
     } 
-    if( !neighbourLocations.has(d.neighbourhood) ){
-        neighbourLocations.add(d.neighbourhood);
+    if( !filterStatus.neighbourLocations.btns.has(d.neighbourhood) ){
+        filterStatus.neighbourLocations.btns.add(d.neighbourhood);
     } 
-    if( !cancelTypes.has(d.cancellation_policy) ){
-        cancelTypes.add(d.cancellation_policy);
+    if( !filterStatus.cancelTypes.btns.has(d.cancellation_policy) ){
+        filterStatus.cancelTypes.btns.add(d.cancellation_policy);
     } 
-    if( !amenitiesTypes.has(d.amenities) ){
-        amenitiesTypes.add(d.amenities);
-    } 
-    //  if( !filterStatus.roomTypes.btns.has(d.room_type) ){
-    //     filterStatus.roomTypes.btns.add(d.room_type);
-    // } 
-    // if( !filterStatus.neighbourLocations.btns.has(d.neighbourhood) ){
-    //     filterStatus.neighbourLocations.btns.add(d.neighbourhood);
-    // } 
-    // if( !filterStatus.cancelTypes.btns.has(d.cancellation_policy) ){
-    //     filterStatus.cancelTypes.btns.add(d.cancellation_policy);
-    // } 
-    // if( !filterStatus.amenitiesTypes.btns.has(d.amenities) ){
-    //     filterStatus.amenitiesTypes.btns.add(d.amenities);
-    // } 
-    // if( !filterStatus.amenitiesTypes.btns.has(d.amenities) ){
-    //     filterStatus.amenitiesTypes.btns.add(d.amenities);
-    // } 
-    
-    return {
+   
+    var entry = {
         id:d.id,
         hostId: +d.host_id,
         hostName: d.host_name,
@@ -250,7 +317,27 @@ function parse(d){
         responseTime: d.host_response_time,
         acceptRate: d.host_acceptance_rate,
         cancelPolicy: d.cancellation_policy,
-        amenities: d.amenities,
+        // amenities: d.amenities,
         monthlyIncome: Math.round(d.price * d.reviews_per_month *d.minimum_nights)
-    }
+    };
+    
+    if(d.amenities.includes('TV')) {
+        if (d.amenities.includes('Wireless')){
+            entry.amenities = 'TV + Wifi';
+        } else {
+            entry.amenities = 'TV';
+        }
+    } else {
+        if (d.amenities.includes('Wireless')){
+            entry.amenities = ' Wifi';
+        } else {
+            entry.amenities = 'None';
+        } 
+    } 
+    
+    if(!filterStatus.amenitiesTypes.btns.has(entry.amenities) ){
+        filterStatus.amenitiesTypes.btns.add(entry.amenities);
+    } 
+  
+    return entry;
 }
