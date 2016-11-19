@@ -209,6 +209,7 @@ function draw(){
         if(!filterStatus.roomTypes.selected.has(entry.roomType)) return false;
         if(!filterStatus.neighbourLocations.selected.has(entry.neighbourhood)) return false;
         if(!filterStatus.cancelTypes.selected.has(entry.cancelPolicy)) return false;
+        if(!filterStatus.amenitiesTypes.selected.has(entry.amenities)) return false;
         return true;
     });
     
