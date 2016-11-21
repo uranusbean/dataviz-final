@@ -1,3 +1,30 @@
+.container {
+    width: 100%;
+    padding: 0;
+}
+
+.row-no-padding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
+.filterSection {
+    margin-top: 15px;
+}
+
+.filterTitle{
+    font-weight: bold;
+}
+
+.filterTitle, .radio {
+    display: inline-block;
+    /*margin-right: 15%;*/
+}
+
+.btn-group p {
+    font-weight: bold;
+}
+
 .axis .tick line{
     stroke:rgb(150,150,150);
 }
@@ -20,4 +47,10 @@
 #TVBtn, #wirelessBtn, #familyBtn, #petsBtn {
     background-color: #8c8c8c;
     color: white;
+}
+
+@media (min-width: 1200px) {
+    .container{
+        max-width: 1480px;
+    }
 }

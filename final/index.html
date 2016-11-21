@@ -1,32 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>Final Proejct</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <link href="../bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../global.css" rel="stylesheet"/>
     <link href="./style.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="container">
-    <h1>Characteristics of Popular Host on Airbnb</h1>
-    <div>
-        <div class="btn-group-roomType">Room Type </div>
-        <div class="btn-group-neighbourhood">Neighbourhood </div>
-        <div class="btn-group-cancelPolicy">Cancel Policy </div>
-        <div class="btn-group-amenities">Amenities </div>
-        <div class="btn-group-familyPets">Family Pets </div>
-    </div>
-    <section class="canvas" id="canvas">
-    </section>
-    <div class="custom-tooltip">
-        <p class="title"></p>
-        <p class="value1"></p>
-        <p class="value2"></p>
-        <p class="value3"></p>
-        <p class="value4"></p>
-        <p class="value5"></p>
-    </div>
+    <div class="row row-no-padding">
+        <h1>Characteristics of Popular Host on Airbnb</h1>
+        <div class="col-sm-8"><section class="canvas" id="canvas"></section></div>
+        <div class="btn-filter col-sm-4">
+            <div>
+                <button type="button" class="btn btn-info clearAllBtn">Clear All</button>
+                <button type="button" class="btn btn-info selectAllBtn">Select All</button>
+            </div>
+            
+            <div class="filterSection"> 
+                <div class="filterTitle">Room Type</div>
+                <div class="radio"> 
+                    <label><input type="radio" name="optradio" value="roomType">Use as color pelette</label>
+                </div>
+                <div class="btn-group-roomType"></div>
+            </div>
+        
+            <div class="filterSection"> 
+                <div class="filterTitle">Neighbourhood</div>
+                <div class="radio"> 
+                    <label><input type="radio" name="optradio" value="neighbourhood">Use as color pelette</label>
+                </div>
+                <div class="btn-group-neighbourhood"></div>
+            </div>
+            
+            <div class="filterSection"> 
+                <div class="filterTitle">Cancel Policy</div>
+                <div class="radio"> 
+                    <label><input type="radio" name="optradio" value="cancelPolicy">Use as color pelette</label>
+                </div>
+                <div class="btn-group-cancelPolicy"></div>
+            </div>
+            
+            <div class="filterSection"> 
+                <div class="filterTitle">Amenities</div>
+                <div class="radio"> 
+                    <label><input type="radio" name="optradio" value="amenities">Use as color pelette</label>
+                </div>
+                <div class="btn-group-amenities"></div>
+            </div>
+            
+             <div class="filterSection"> 
+                <div class="filterTitle">Family Pets</div>
+                <div class="radio"> 
+                    <label><input type="radio" name="optradio" value="familyPets">Use as color pelette</label>
+                </div>
+                <div class="btn-group-familyPets"></div>
+            </div>
     
+        </div>
+        <div class="custom-tooltip">
+            <p class="title"></p>
+            <p class="value1"></p>
+            <p class="value2"></p>
+            <p class="value3"></p>
+            <p class="value4"></p>
+            <p class="value5"></p>
+        </div>
+     </div>
 </div>
 
 

@@ -35,12 +35,14 @@ var filterStatus = {
     }
 }
 
+var scaleColorRoom = d3.scaleOrdinal()
+    .range(['#fd6b5a','#06ce98','#2175bc']),
+    scaleColorPolicy = d3.scaleOrdinal()
+    .range(['#03afeb','orange','#06ce98','blue']);
 var scaleX = d3.scaleLinear()
     // .exponent(.2)   
-    .domain([0, 30])
-    .range([0,w]);
-var scaleColor = d3.scaleOrdinal()
-    .range(['#fd6b5a','#03afeb','orange']);        
+    .domain([0, 20])
+    .range([0,w]);   
 var scaleY = d3.scaleLinear()
     .domain([0,300])
     .range([h,0]);
@@ -106,9 +108,9 @@ function addButtonGroup(btnGroupContainer,btnNameSet,onclick) {
         .append('a')
         .html(function(d){return d})
         .attr('href','#')
-        .attr('class','btn btn-default btn-primary')
+        .attr('class','btn btn-default')
         .style('color','white')
-        // .style('background',function(d){return scaleColor(d)})
+        .style('background','#337ab7')
         .style('border-color','white')
         .on('click',onclick);
 }
@@ -121,8 +123,8 @@ function roomTypeBtnClickHandler(roomType){
     }
   
     if (filterStatus.roomTypes.selected.has(roomType)) {
-        d3.select(this).style('background','#337ab7');
-        
+        // d3.select(this).style('background','#337ab7');
+        d3.select(this).style('background',function(d){return scaleColorRoom(d)})
     } else {
         d3.select(this).style('background','#8c8c8c');
     }
@@ -194,7 +196,6 @@ function familyPetsBtnClickHandler(familyPets) {
     } else {
         d3.select(this).style('background','#8c8c8c');
     }
-    
     draw();
 }
 
@@ -210,6 +211,7 @@ function draw(){
         if(!filterStatus.neighbourLocations.selected.has(entry.neighbourhood)) return false;
         if(!filterStatus.cancelTypes.selected.has(entry.cancelPolicy)) return false;
         if(!filterStatus.amenitiesTypes.selected.has(entry.amenities)) return false;
+        if(!filterStatus.familyPets.selected.has(entry.familyPets)) return false;
         return true;
     });
     
@@ -218,11 +220,8 @@ function draw(){
         
     //ENTER
     var nodeEnter = node.enter()
-        .append('circle')
+        .append('g')
         .attr('class','node')
-        .attr('r', function(d){
-            return scaleIncome(d.monthlyIncome);
-        })
         .on('click',function(d,i){
             // console.log(d);
             // console.log(i);
@@ -260,25 +259,35 @@ function draw(){
              var tooltip = d3.select('.custom-tooltip');
              tooltip.transition().style('opacity',0);
              d3.select(this).style('stroke-width','0px');
-        })
-    //UPDATE+ ENTER
-    nodeEnter
-        .merge(node)
-        .attr('cx',function(d){
-            return scaleX(d.minNights);
-        })
-        .attr('cy',function(d){
-            return scaleY(d.cleaningFee);
-        })
-        // .attr('r',3)
+        });
+    
+    nodeEnter.append('circle')
         .attr('r', function(d){
             return scaleIncome(d.monthlyIncome);
         })
-        .style ('fill', 'black')
-        // .style('fill',function(d){
-        //     return scaleColor(d.roomType);
-        // })
-        .style('opacity',1);
+        .style('fill','#8c8c8c');
+    
+    //UPDATE+ ENTER
+    var nodeTransition = nodeEnter
+        .merge(node);
+    nodeTransition.select('circle')
+        .attr('cx',function(d){return scaleX(d.minNights);})
+        .attr('cy',function(d){return h;})
+        .transition()
+        .duration(1000)
+        .attr('cy',function(d){return scaleY(d.cleaningFee);})
+        .attr('r', function(d){
+            return scaleIncome(d.monthlyIncome);
+        })
+        .style("fill", function(d) { 
+            if($('input[name=optradio]:checked').val() == 'roomType'){
+                // console.log($('input[name=optradio]:checked').val());
+                return scaleColorRoom(d.roomType); 
+            } else {
+                return scaleColorPolicy(d.cancelPolicy);
+            }
+        })
+        .style('opacity',0.7);
 
     //EXIT
     node.exit().remove();
@@ -339,6 +348,25 @@ function parse(d){
     if(!filterStatus.amenitiesTypes.btns.has(entry.amenities) ){
         filterStatus.amenitiesTypes.btns.add(entry.amenities);
     } 
-  
+    
+    
+    if(d.amenities.includes('Family/Kid Friendly')) {
+        if (d.amenities.includes('Pets Allowed')){
+            entry.familyPets = 'Family/Kid Friendly + Pets Allowed';
+        } else {
+            entry.familyPets = 'Family/Kid Friendly';
+        }
+    } else {
+        if (d.amenities.includes('Pets Allowed')){
+            entry.familyPets = 'Pets Allowed';
+        } else {
+            entry.familyPets = 'None';
+        } 
+    } 
+    
+    if(!filterStatus.familyPets.btns.has(entry.familyPets) ){
+        filterStatus.familyPets.btns.add(entry.familyPets);
+    } 
+    
     return entry;
 }
