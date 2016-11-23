@@ -38,7 +38,7 @@ var filterStatus = {
 var scaleColorRoom = d3.scaleOrdinal()
     .range(['#fd6b5a','#06ce98','#2175bc']),
     scaleColorPolicy = d3.scaleOrdinal()
-    .range(['#03afeb','orange','#06ce98','blue']);
+    .range(['#03afeb','orange','#06ce98','#fd6b5a']);
 var scaleX = d3.scaleLinear()
     // .exponent(.2)   
     .domain([0, 20])
@@ -65,9 +65,20 @@ function preprocessData(data){
         if(entry.minNights == 0 || entry.minNights >31) return false;
         if(entry.calculatedHostListing == 0) return false;
         if(entry.minNights * entry.reviewsPerMonth > 30) return false;
+        if(entry.cancelPolicy == 'super_strict_30') return false;
         return true;
     });
-    
+    dataSet.forEach(function(d){
+        if( !filterStatus.roomTypes.btns.has(d.roomType) ){
+            filterStatus.roomTypes.btns.add(d.roomType);
+        } 
+        if( !filterStatus.neighbourLocations.btns.has(d.neighbourhood) ){
+            filterStatus.neighbourLocations.btns.add(d.neighbourhood);
+        } 
+        if( !filterStatus.cancelTypes.btns.has(d.cancelPolicy) ){
+            filterStatus.cancelTypes.btns.add(d.cancelPolicy);
+        } 
+    })
     addButtonGroups();
 }
 
@@ -98,6 +109,9 @@ function addButtonGroups(){
     
     addButtonGroup('.btn-group-familyPets', filterStatus.familyPets.btns, familyPetsBtnClickHandler);
     filterStatus.familyPets.selected = filterStatus.familyPets.btns;
+
+    colorBasedOnFilter();
+    
 }
 
 function addButtonGroup(btnGroupContainer,btnNameSet,onclick) {
@@ -107,13 +121,48 @@ function addButtonGroup(btnGroupContainer,btnNameSet,onclick) {
         .enter()
         .append('a')
         .html(function(d){return d})
-        .attr('href','#')
         .attr('class','btn btn-default')
         .style('color','white')
-        .style('background','#337ab7')
-        .style('border-color','white')
         .on('click',onclick);
 }
+
+function colorBasedOnFilter() {
+    d3.selectAll('.btn')
+        .style('background',function(btnContent){
+            if(isBtnSelected(btnContent)) {
+                if(isBtnGroupColorPelette(btnContent)){
+                    return scaleColorPolicy(btnContent)
+                } else {
+                    return '#484848';
+                } 
+            } else {
+                return 'white';
+            }
+        })
+}
+
+function isBtnSelected(btn){
+    if(filterStatus.roomTypes.selected.has(btn)) return true;
+    if(filterStatus.neighbourLocations.selected.has(btn)) return true;
+    if(filterStatus.cancelTypes.selected.has(btn)) return true;
+    if(filterStatus.amenitiesTypes.selected.has(btn)) return true;
+    if(filterStatus.familyPets.selected.has(btn)) return true;
+    return false;
+}
+
+function isBtnGroupColorPelette(btn){
+    var groupName;
+    
+    if(filterStatus.roomTypes.btns.has(btn)) groupName = 'roomType';
+    if(filterStatus.neighbourLocations.btns.has(btn)) groupName = 'neighbourhood';
+    if(filterStatus.cancelTypes.btns.has(btn)) groupName = 'cancelPolicy';
+    if(filterStatus.amenitiesTypes.btns.has(btn)) groupName = 'amenities';
+    if(filterStatus.familyPets.btns.has(btn)) groupName = 'familyPets';
+    
+    if($('input[name=optradio]:checked').val() == groupName) return true;
+    return false;
+}
+
 
 function roomTypeBtnClickHandler(roomType){
     if (filterStatus.roomTypes.selected.has(roomType)){
@@ -123,12 +172,16 @@ function roomTypeBtnClickHandler(roomType){
     }
   
     if (filterStatus.roomTypes.selected.has(roomType)) {
-        // d3.select(this).style('background','#337ab7');
-        d3.select(this).style('background',function(d){return scaleColorRoom(d)})
+        d3.select(this)
+            .style('background',function(d){return scaleColorPolicy(d)})
+            .style('color','white');
     } else {
-        d3.select(this).style('background','#8c8c8c');
+        d3.select(this)
+            .style('background','white')
+            .style('color','#ddd')
+            .style('border-style','dotted');
     }
-    
+    colorBasedOnFilter();
     draw();
 }
 
@@ -146,9 +199,12 @@ function neighbourhoodBtnClickHandler(neighbourhood){
     if (filterStatus.neighbourLocations.selected.has(neighbourhood)) {
         d3.select(this).style('background','#337ab7');
     } else {
-        d3.select(this).style('background','#8c8c8c');
+        d3.select(this)
+            .style('background','white')
+            .style('color','#ddd')
+            .style('border-style','dotted');
     }
-    
+    colorBasedOnFilter(); 
     draw();
 }
 
@@ -160,11 +216,16 @@ function cancelPolicyBtnClickHandler(cancelPolicy){
     }
   
     if (filterStatus.cancelTypes.selected.has(cancelPolicy)) {
-        d3.select(this).style('background','#337ab7');
+        d3.select(this)
+        .style('background',function(d){return scaleColorPolicy(d)})
+        .style('color','white');
     } else {
-        d3.select(this).style('background','#8c8c8c');
+        d3.select(this)
+            .style('background','white')
+            .style('color','#ddd')
+            .style('border-style','dotted');
     }
-    
+    colorBasedOnFilter();    
     draw();
 }
 
@@ -178,9 +239,12 @@ function amenitiesBtnClickHandler(amenities) {
     if (filterStatus.amenitiesTypes.selected.has(amenities)) {
         d3.select(this).style('background','#337ab7');
     } else {
-        d3.select(this).style('background','#8c8c8c');
+        d3.select(this)
+            .style('background','white')
+            .style('color','#ddd')
+            .style('border-style','dotted');
     }
-    
+    colorBasedOnFilter();    
     draw();
 }
 
@@ -194,8 +258,12 @@ function familyPetsBtnClickHandler(familyPets) {
     if (filterStatus.familyPets.selected.has(familyPets)) {
         d3.select(this).style('background','#337ab7');
     } else {
-        d3.select(this).style('background','#8c8c8c');
+        d3.select(this)
+            .style('background','white')
+            .style('color','#ddd')
+            .style('border-style','dotted');
     }
+    colorBasedOnFilter();
     draw();
 }
 
@@ -232,17 +300,17 @@ function draw(){
                 
             var tooltip = d3.select('.custom-tooltip');
             tooltip.selectAll('.title')
-                .html('Host:'+ d.id);
+                .html('Host: '+ d.id);
             tooltip.select('.value1')
                 .html(d.reviewsPerMonth +' reviews/ month');
             tooltip.select('.value2')
                 .html('$'+ d.price + '/ night');
             tooltip.select('.value3')
-                .html('Cancel Policy:'+d.cancelPolicy);
+                .html('Cancel Policy: '+d.cancelPolicy);
             tooltip.select('.value4')
                 .html('Minimum Nights: '+d.minNights);
             tooltip.select('.value5')
-                .html('Monthly Income: '+d.monthlyIncome);
+                .html('Monthly Income: $'+d.monthlyIncome);
             tooltip.transition()
                 .style('opacity',1)
                 .style('visibility','visible');
@@ -268,42 +336,91 @@ function draw(){
         .style('fill','#8c8c8c');
     
     //UPDATE+ ENTER
-    var nodeTransition = nodeEnter
-        .merge(node);
-    nodeTransition.select('circle')
+    // var nodeTransition = nodeEnter
+    //     .merge(node);  --nodes appear everytime clicking on the btn
+    
+    nodeEnter.select('circle')
         .attr('cx',function(d){return scaleX(d.minNights);})
-        .attr('cy',function(d){return h;})
+        .attr('cy',function(d){return h;});
+        // .transition()
+        // .duration(1000)
+        // .attr('cy',function(d){return scaleY(d.cleaningFee);})
+        // // .attr('r', function(d){
+        // //     return scaleIncome(d.monthlyIncome);
+        // // })
+        // .style("fill", function(d) { 
+        //     if($('input[name=optradio]:checked').val() == 'roomType'){
+        //         // console.log($('input[name=optradio]:checked').val());
+        //         return scaleColorRoom(d.roomType); 
+        //     } else {
+        //         return scaleColorPolicy(d.cancelPolicy);
+        //     }
+        // })
+        // .style('opacity',0.7);
+    
+    nodeEnter.merge(node)
+        .select('circle')
         .transition()
         .duration(1000)
         .attr('cy',function(d){return scaleY(d.cleaningFee);})
-        .attr('r', function(d){
-            return scaleIncome(d.monthlyIncome);
-        })
+        // .attr('r', function(d){
+        //     return scaleIncome(d.monthlyIncome);
+        // })
         .style("fill", function(d) { 
             if($('input[name=optradio]:checked').val() == 'roomType'){
                 // console.log($('input[name=optradio]:checked').val());
-                return scaleColorRoom(d.roomType); 
-            } else {
+                return scaleColorPolicy(d.roomType); 
+            } else if($('input[name=optradio]:checked').val() == 'cancelPolicy'){
                 return scaleColorPolicy(d.cancelPolicy);
-            }
+            } else if($('input[name=optradio]:checked').val() == 'amenities'){
+                return scaleColorPolicy(d.amenities);
+            } else if($('input[name=optradio]:checked').val() == 'familyPets'){
+                return scaleColorPolicy(d.familyPets);
+            } else if($('input[name=optradio]:checked').val() == 'neighbourhood'){
+                return scaleColorPolicy(d.neighbourhood);
+            } 
         })
         .style('opacity',0.7);
-
     //EXIT
     node.exit().remove();
 } 
 
+$('.roomTypeRadioBtn').click(function(){
+    colorBasedOnFilter();
+    draw();
+})
+
+$('.cancelPolicyRadioBtn').click(function(){
+    colorBasedOnFilter();
+    draw();
+})
+
+$('.amenitiesRadioBtn').click(function(){
+    colorBasedOnFilter();
+    draw();
+})
+
+$('.familyPetsRadioBtn').click(function(){
+    colorBasedOnFilter();
+    draw();
+})
+
+$('.neighbourhoodRadioBtn').click(function(){
+    colorBasedOnFilter();
+    draw();
+})
+
+
 function parse(d){
-    if( !filterStatus.roomTypes.btns.has(d.room_type) ){
-        filterStatus.roomTypes.btns.add(d.room_type);
-    } 
-    if( !filterStatus.neighbourLocations.btns.has(d.neighbourhood) ){
-        filterStatus.neighbourLocations.btns.add(d.neighbourhood);
-    } 
-    if( !filterStatus.cancelTypes.btns.has(d.cancellation_policy) ){
-        filterStatus.cancelTypes.btns.add(d.cancellation_policy);
-    } 
-   
+    // if( !filterStatus.roomTypes.btns.has(d.room_type) ){
+    //     filterStatus.roomTypes.btns.add(d.room_type);
+    // } 
+    // if( !filterStatus.neighbourLocations.btns.has(d.neighbourhood) ){
+    //     filterStatus.neighbourLocations.btns.add(d.neighbourhood);
+    // } 
+    // if( !filterStatus.cancelTypes.btns.has(d.cancellation_policy) ){
+    //     filterStatus.cancelTypes.btns.add(d.cancellation_policy);
+    // } 
     var entry = {
         id:d.id,
         hostId: +d.host_id,
@@ -341,14 +458,9 @@ function parse(d){
         if (d.amenities.includes('Wireless')){
             entry.amenities = ' Wifi';
         } else {
-            entry.amenities = 'None';
+            entry.amenities = 'No TV No Wifi';
         } 
     } 
-    
-    if(!filterStatus.amenitiesTypes.btns.has(entry.amenities) ){
-        filterStatus.amenitiesTypes.btns.add(entry.amenities);
-    } 
-    
     
     if(d.amenities.includes('Family/Kid Friendly')) {
         if (d.amenities.includes('Pets Allowed')){
@@ -364,6 +476,9 @@ function parse(d){
         } 
     } 
     
+    if(!filterStatus.amenitiesTypes.btns.has(entry.amenities) ){
+        filterStatus.amenitiesTypes.btns.add(entry.amenities);
+    } 
     if(!filterStatus.familyPets.btns.has(entry.familyPets) ){
         filterStatus.familyPets.btns.add(entry.familyPets);
     } 

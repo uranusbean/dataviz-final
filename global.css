@@ -1,3 +1,7 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
 .canvas{
     width:100%;
     min-height:600px;
@@ -19,7 +23,9 @@
     visibility:hidden;
     opacity:0;
 }
-    .custom-tooltip .title{
-        font-size:1.2em;
-        font-weight:bold;
+
+.custom-tooltip .title{
+    font-size:1.2em;
+    font-weight:bold;
     }
+

@@ -6,6 +6,7 @@
     <link href="../bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../global.css" rel="stylesheet"/>
     <link href="./style.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -13,49 +14,64 @@
         <h1>Characteristics of Popular Host on Airbnb</h1>
         <div class="col-sm-8"><section class="canvas" id="canvas"></section></div>
         <div class="btn-filter col-sm-4">
-            <div>
-                <button type="button" class="btn btn-info clearAllBtn">Clear All</button>
-                <button type="button" class="btn btn-info selectAllBtn">Select All</button>
-            </div>
+            <!--<div>-->
+            <!--    <button type="button" class="btn btn-info clearAllBtn">Clear All</button>-->
+            <!--    <button type="button" class="btn btn-info selectAllBtn">Select All</button>-->
+            <!--</div>-->
             
             <div class="filterSection"> 
-                <div class="filterTitle">Room Type</div>
+                <div>
+                    <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> 
+                    <span class="filterTitle"> Room Type</span>
+                </div>
                 <div class="radio"> 
-                    <label><input type="radio" name="optradio" value="roomType">Use as color pelette</label>
+                    <label><input checked type="radio" name="optradio" value="roomType" class="roomTypeRadioBtn">Use as color pelette</label>
                 </div>
                 <div class="btn-group-roomType"></div>
             </div>
-        
+  
             <div class="filterSection"> 
-                <div class="filterTitle">Neighbourhood</div>
-                <div class="radio"> 
-                    <label><input type="radio" name="optradio" value="neighbourhood">Use as color pelette</label>
+                <div>
+                    <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> 
+                    <span class="filterTitle">Cancel Policy</span>
                 </div>
-                <div class="btn-group-neighbourhood"></div>
-            </div>
-            
-            <div class="filterSection"> 
-                <div class="filterTitle">Cancel Policy</div>
                 <div class="radio"> 
-                    <label><input type="radio" name="optradio" value="cancelPolicy">Use as color pelette</label>
+                    <label><input type="radio" name="optradio" value="cancelPolicy" class="cancelPolicyRadioBtn">Use as color pelette</label>
                 </div>
                 <div class="btn-group-cancelPolicy"></div>
             </div>
             
             <div class="filterSection"> 
-                <div class="filterTitle">Amenities</div>
+                <div>
+                    <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> 
+                    <span class="filterTitle">Amenities</span> 
+                </div>
                 <div class="radio"> 
-                    <label><input type="radio" name="optradio" value="amenities">Use as color pelette</label>
+                    <label><input type="radio" name="optradio" value="amenities" class="amenitiesRadioBtn">Use as color pelette</label>
                 </div>
                 <div class="btn-group-amenities"></div>
             </div>
             
              <div class="filterSection"> 
-                <div class="filterTitle">Family Pets</div>
+                <div>
+                    <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>  
+                    <span class="filterTitle">Family Pets</span>
+                </div>
                 <div class="radio"> 
-                    <label><input type="radio" name="optradio" value="familyPets">Use as color pelette</label>
+                    <label><input type="radio" name="optradio" value="familyPets" class="familyPetsRadioBtn">Use as color pelette</label>
                 </div>
                 <div class="btn-group-familyPets"></div>
+            </div>
+            
+            <div class="filterSection"> 
+                <div>
+                    <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> 
+                    <span class="filterTitle">Neighbourhood</span>
+                </div>
+                <div class="radio"> 
+                    <label><input type="radio" name="optradio" value="neighbourhood" class="neighbourhoodRadioBtn">Use as color pelette</label>
+                </div>
+                <div class="btn-group-neighbourhood"></div>
             </div>
     
         </div>

@@ -1,11 +1,15 @@
 .container {
-    width: 100%;
+    width: 85%;
     padding: 0;
+}
+
+.container h1 {
+    margin-left: 5%;
 }
 
 .row-no-padding {
    padding: 0 !important;
-   margin: 0 !important;
+   /*margin: 0 !important;*/
 }
 
 .filterSection {
@@ -14,9 +18,10 @@
 
 .filterTitle{
     font-weight: bold;
+    font-family: 'Roboto', sans-serif;
 }
 
-.filterTitle, .radio {
+.filterSection, .radio {
     display: inline-block;
     /*margin-right: 15%;*/
 }
@@ -44,13 +49,6 @@
     text-align: center;
 }
 
-#TVBtn, #wirelessBtn, #familyBtn, #petsBtn {
-    background-color: #8c8c8c;
-    color: white;
-}
-
-@media (min-width: 1200px) {
-    .container{
-        max-width: 1480px;
-    }
+.filterSection {
+    text-transform: capitalize;
 }
