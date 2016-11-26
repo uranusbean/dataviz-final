@@ -12,13 +12,17 @@
 <div class="container">
     <div class="row row-no-padding">
         <h1>Characteristics of Popular Host on Airbnb</h1>
-        <div class="col-sm-8"><section class="canvas" id="canvas"></section></div>
+        <div class="col-sm-8">
+            <div>
+                <button type="button" class="btn btn-default" id="chartBtn">Chart</button>
+                <button type="button" class="btn btn-default" id="mapBtn">Map</button>
+            </div>
+            <section class="canvas" id="canvas"></section>
+            <div class="legend">
+                <!--<span class='circelSizeLegend'></span>-->
+            </div>
+        </div>
         <div class="btn-filter col-sm-4">
-            <!--<div>-->
-            <!--    <button type="button" class="btn btn-info clearAllBtn">Clear All</button>-->
-            <!--    <button type="button" class="btn btn-info selectAllBtn">Select All</button>-->
-            <!--</div>-->
-            
             <div class="filterSection"> 
                 <div>
                     <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> 
@@ -86,7 +90,7 @@
      </div>
 </div>
 
-
+<script src="neighborhoods.js"></script>
 <script src="../d3.js"></script>
 <script src="script.js"></script>
 

@@ -6,7 +6,7 @@ var m = {t:50,r:50,b:50,l:50},
 var plot = d3.select('.canvas')
     .append('svg')
     .attr('width', w + m.l + m.r)
-    .attr('height', h + m.t + m.b)
+    .attr('height', h + m.t + m.b +100)
     .append('g')
     .attr('transform','translate('+ m.l+','+ m.t+')');
 
@@ -54,10 +54,50 @@ var axisY = d3.axisLeft()
     .scale(scaleY)
     .tickSize(-w);
  
+//Mapping - define projection, define path 
+var projection = d3.geoAlbers()
+    .scale(240000)
+    .rotate([71.068,0])
+    .center([0,42.355])
+    .translate([w/2,h/4])
+    
+var path = d3.geoPath().projection(projection);
+var map = plot.selectAll('path')
+        .data(neighborhoods_json.features);
+        
+var controlBtnId =1;
+
 d3.queue()
     .defer(d3.csv,'../data/airbnb.csv',parse)
     .await(dataloaded);
 
+//legend 
+plot.append('text')
+    .text('Estimated Monthly Income')
+    .attr('dx',0)
+    .attr('dy',h+70)
+    
+plot.append('circle')
+    .attr('r',15)
+    .attr('cx',200)
+    .attr('cy', h+70)
+    .style('stroke', '#484848')
+    .style('fill','white');
+
+plot.append('circle')
+    .attr('r',10)
+    .attr('cx',240)
+    .attr('cy', h+70)
+    .style('stroke', '#484848')
+    .style('fill','white');
+
+plot.append('circle')
+    .attr('r',6)
+    .attr('cx',270)
+    .attr('cy', h+70)
+    .style('stroke', '#484848')
+    .style('fill','white');
+    
 function preprocessData(data){
     dataSet = data;
     dataSet = dataSet.filter(function(entry){
@@ -83,14 +123,8 @@ function preprocessData(data){
 }
 
 function dataloaded(err, data){
-    //Draw axis
-    plot.append('g').attr('class','axis axis-x')
-        .attr('transform','translate(0,'+h+')')
-        .call(axisX);
-    plot.append('g').attr('class','axis axis-y')
-        .call(axisY);
-    
     preprocessData(data);
+    drawAxis();
     draw();
 } 
 
@@ -267,6 +301,45 @@ function familyPetsBtnClickHandler(familyPets) {
     draw();
 }
 
+function drawAxis(){
+    plot.append('g').attr('class','axis axis-x')
+        .attr('transform','translate(0,'+h+')')
+        .call(axisX);
+        
+    plot.append('g').attr('class','axis axis-y')
+        .call(axisY);
+}
+
+function drawMap(){
+    map.enter()
+        .append('path')
+        .attr('fill','#ddd')
+        .style('opacity',0.3)
+        .attr('d',path);
+        
+    map.exit()
+        .remove();
+}
+
+function canvasControl(){
+    d3.select('#chartBtn').on('click',function(){
+        controlBtnId = 1; 
+        drawAxis();
+        $('path').css('display','none');
+        draw();
+    });
+    
+    d3.select('#mapBtn').on('click',function(){
+        controlBtnId = 2;
+        drawMap();
+        $('.axis-x').css('display','none');
+        $('.axis-y').css('display','none');
+        draw();
+    });
+}
+
+canvasControl();
+
 function draw(){
     var minX = d3.min(dataSet, function(d){return d.monthlyIncome;}),
         maxX = d3.max(dataSet, function(d){return d.monthlyIncome;}); 
@@ -297,7 +370,6 @@ function draw(){
             // console.log(d); 
         })
         .on('mouseenter',function(d){
-                
             var tooltip = d3.select('.custom-tooltip');
             tooltip.selectAll('.title')
                 .html('Host: '+ d.id);
@@ -338,34 +410,42 @@ function draw(){
     //UPDATE+ ENTER
     // var nodeTransition = nodeEnter
     //     .merge(node);  --nodes appear everytime clicking on the btn
-    
+
     nodeEnter.select('circle')
-        .attr('cx',function(d){return scaleX(d.minNights);})
-        .attr('cy',function(d){return h;});
-        // .transition()
-        // .duration(1000)
-        // .attr('cy',function(d){return scaleY(d.cleaningFee);})
-        // // .attr('r', function(d){
-        // //     return scaleIncome(d.monthlyIncome);
-        // // })
-        // .style("fill", function(d) { 
-        //     if($('input[name=optradio]:checked').val() == 'roomType'){
-        //         // console.log($('input[name=optradio]:checked').val());
-        //         return scaleColorRoom(d.roomType); 
-        //     } else {
-        //         return scaleColorPolicy(d.cancelPolicy);
-        //     }
-        // })
-        // .style('opacity',0.7);
+        .attr('cx',function(d){
+            if (controlBtnId == 1){
+                return scaleX(d.minNights);
+            }else if(controlBtnId ==2) {
+                return projection([d.lon,d.lat])[0];
+            }
+        })
+        .attr('cy',function(d){
+            if (controlBtnId == 1){
+                return scaleY(d.cleaningFee);
+            }else if(controlBtnId ==2) {
+                return projection([d.lon,d.lat])[1];
+            }
+        });
     
     nodeEnter.merge(node)
         .select('circle')
         .transition()
         .duration(1000)
-        .attr('cy',function(d){return scaleY(d.cleaningFee);})
-        // .attr('r', function(d){
-        //     return scaleIncome(d.monthlyIncome);
-        // })
+        // .attr('cy',function(d){return scaleY(d.cleaningFee);})
+        .attr('cx',function(d){
+            if (controlBtnId == 1){
+                return scaleX(d.minNights);
+            }else if(controlBtnId ==2) {
+                return projection([d.lon,d.lat])[0];
+            }
+        })
+        .attr('cy',function(d){
+            if (controlBtnId == 1){
+                return scaleY(d.cleaningFee);
+            }else if(controlBtnId ==2) {
+                return projection([d.lon,d.lat])[1];    
+            }
+        })
         .style("fill", function(d) { 
             if($('input[name=optradio]:checked').val() == 'roomType'){
                 // console.log($('input[name=optradio]:checked').val());
@@ -427,7 +507,7 @@ function parse(d){
         hostName: d.host_name,
         neighbourhood: d.neighbourhood,
         lat: +d.latitude,
-        lon: +d.longtitude,
+        lon: +d.longitude,
         roomType: d.room_type,
         accommodates: d.accommodates,
         bathrooms: +d.bathrooms,

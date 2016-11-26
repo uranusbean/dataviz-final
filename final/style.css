@@ -52,3 +52,17 @@
 .filterSection {
     text-transform: capitalize;
 }
+
+.chartBtn .mapBtn {
+    color: black;
+}
+
+.showMap {
+    display: none;
+}
+
+/*.legend{*/
+/*    width: 150px;*/
+/*    height: 100px;*/
+/*    background: #ddd;*/
+/*}*/
