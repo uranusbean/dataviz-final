@@ -1,7 +1,9 @@
 console.log('final project');
 var m = {t:50,r:50,b:50,l:50},
     w = document.getElementById('canvas').clientWidth - m.l - m.r,
-    h = document.getElementById('canvas').clientHeight - m.t - m.b;
+    h = document.getElementById('canvas').clientHeight - m.t - m.b,
+    hLable = h+100,
+    wLable = w-100;
 
 var plot = d3.select('.canvas')
     .append('svg')
@@ -302,13 +304,45 @@ function familyPetsBtnClickHandler(familyPets) {
 }
 
 function drawAxis(){
+
     plot.append('g').attr('class','axis axis-x')
         .attr('transform','translate(0,'+h+')')
         .call(axisX);
-        
     plot.append('g').attr('class','axis axis-y')
         .call(axisY);
+        
+    $('.xAxisOptions').css('left', wLable).css('top', hLable);
+    $('.yAxisOptions').css('left', 200).css('top', 140).css('position','fixed');
+    // $('.yAxisOptions').css('left', -50).css('top', 30);
+    
+    $('.xAxisOptions li a').click(function(){
+        $('#xDropdown').text($(this).text());
+        $('#xDropdown').val($(this).text());
+   });
+   
+   $('.yAxisOptions li a').click(function(){
+        $('#yDropdown').text($(this).text());
+        $('#yDropdown').val($(this).text());
+   });
 }
+
+   
+
+
+// Close the dropdown if the user clicks outside of it
+// window.onclick = function(event) {
+//   if (!event.target.matches('.dropbtn')) {
+
+//     var dropdowns = document.getElementsByClassName("dropdown-content");
+//     var i;
+//     for (i = 0; i < dropdowns.length; i++) {
+//       var openDropdown = dropdowns[i];
+//       if (openDropdown.classList.contains('show')) {
+//         openDropdown.classList.remove('show');
+//       }
+//     }
+//   }
+// }
 
 function drawMap(){
     map.enter()
@@ -316,7 +350,6 @@ function drawMap(){
         .attr('fill','#ddd')
         .style('opacity',0.3)
         .attr('d',path);
-        
     map.exit()
         .remove();
 }
@@ -327,6 +360,7 @@ function canvasControl(){
         drawAxis();
         $('path').css('display','none');
         draw();
+        map.moveToBack();
     });
     
     d3.select('#mapBtn').on('click',function(){

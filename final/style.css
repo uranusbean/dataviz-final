@@ -57,12 +57,6 @@
     color: black;
 }
 
-.showMap {
-    display: none;
+.dropdown-toggle {
+    border: none;
 }
-
-/*.legend{*/
-/*    width: 150px;*/
-/*    height: 100px;*/
-/*    background: #ddd;*/
-/*}*/
