@@ -380,53 +380,55 @@ function familyPetsBtnClickHandler(familyPets) {
 }
 
 function drawAxis(){
-    plot.append('g').attr('class','axis axis-x')
-        .attr('transform','translate(0,'+h+')')
-        .call(axisXscaleXminNights);
-    plot.append('g').attr('class','axis axis-y')
-        .call(axisYscaleYcleaningFee);
+    // plot.append('g').attr('class','axis axis-x')
+    //     .attr('transform','translate(0,'+h+')')
+    //     .call(axisXscaleXminNights);
+    // plot.append('g').attr('class','axis axis-y')
+    //     .call(axisYscaleYcleaningFee);
     
     if ($('#xDropdown').text() == 'Minimum Nights') {
         plot.append('g').attr('class','axis axis-x')
-        .attr('transform','translate(0,'+h+')')
-        .call(axisXscaleXminNights);
+            .attr('transform','translate(0,'+h+')')
+            .call(axisXscaleXminNights);
     }else if ($('#xDropdown').text() == 'Reviews Per Month'){
         plot.append('g').attr('class','axis axis-x')
-        .call(axisXscaleXreviewsPerMonth);
+            .attr('transform','translate(0,'+h+')')
+            .call(axisXscaleXreviewsPerMonth);
     }else if ($('#xDropdown').text() == 'Cleaning Fee'){
         plot.append('g').attr('class','axis axis-x')
-        .call(axisXscaleXcleaningFee);
+            .attr('transform','translate(0,'+h+')')
+            .call(axisXscaleXcleaningFee);
     }else if ($('#xDropdown').text() == 'Price'){
         plot.append('g').attr('class','axis axis-x')
-        .call(axisXscaleXprice);
+            .attr('transform','translate(0,'+h+')')
+            .call(axisXscaleXprice);
     }else if ($('#xDropdown').text() == 'Calculated Host Listings'){
         plot.append('g').attr('class','axis axis-x')
-        .call(axisXscaleXcalculatedHostListing);
+            .attr('transform','translate(0,'+h+')')
+            .call(axisXscaleXcalculatedHostListing);
     };
     
     if ($('#yDropdown').text() == 'Minimum Nights') {
         plot.append('g').attr('class','axis axis-y')
-        // .attr('transform','translate(0,'+h+')')
-        .call(axisYscaleYminNights);
+            .call(axisYscaleYminNights);
     }else if ($('#yDropdown').text() == 'Reviews Per Month'){
         plot.append('g').attr('class','axis axis-y')
-        .call(axisYscaleYreviewsPerMonth);
+            .attr('transform','translate('+w+',0)')
+            .call(axisYscaleYreviewsPerMonth);
     }else if ($('#yDropdown').text() == 'Cleaning Fee'){
         plot.append('g').attr('class','axis axis-y')
-        .call(axisYscaleYcleaningFee);
+            .call(axisYscaleYcleaningFee);
     }else if ($('#yDropdown').text() == 'Price'){
         plot.append('g').attr('class','axis axis-y')
-        .call(axisYscaleYprice);
+            .call(axisYscaleYprice);
     }else if ($('#yDropdown').text() == 'Calculated Host Listings'){
         plot.append('g').attr('class','axis axis-y')
-        .call(axisYscaleYcalculatedHostListing);
+            .call(axisYscaleYcalculatedHostListing);
     };
-    
-
         
     $('.xAxisOptions').css('left', wLable).css('top', hLable);
-    $('.yAxisOptions').css('left', 150).css('top', 140).css('position','fixed');
-    // $('.yAxisOptions').css('left', -50).css('top', 30);
+    // $('.yAxisOptions').css('left', 150).css('top', 140).css('position','fixed');
+    $('.yAxisOptions').css('left', -100).css('top', 30);
     
     $('.xAxisOptions li a').click(function(){
         // $('#xDropdown').html($(this).text());
@@ -471,6 +473,7 @@ function drawMap(){
 
 function canvasControl(){
     d3.select('#chartBtn').on('click',function(){
+        if(controlBtnId == 1) return; 
         controlBtnId = 1; 
         drawAxis();
         $('path').css('display','none');
@@ -478,6 +481,7 @@ function canvasControl(){
     });
     
     d3.select('#mapBtn').on('click',function(){
+        if(controlBtnId == 2) return; 
         controlBtnId = 2;
         drawMap();
         $('.axis-x').css('display','none');
