@@ -196,8 +196,8 @@ function preprocessData(data){
         } 
     })
     addButtonGroups();
-    $('#xDropdown').text('Minimum Nights');
-    $('#yDropdown').text('Cleaning Fee');
+    $('#xDropdown').html('Minimum Nights<span class="caret"></span>');
+    $('#yDropdown').html('Cleaning Fee<span class="caret"></span>');
 }
 
 function dataloaded(err, data){
@@ -429,13 +429,15 @@ function drawAxis(){
     // $('.yAxisOptions').css('left', -50).css('top', 30);
     
     $('.xAxisOptions li a').click(function(){
-        $('#xDropdown').text($(this).text());
+        // $('#xDropdown').html($(this).text());
+        $('#xDropdown').html($(this).text()+'<span class="caret"></span>');
         // $('#xDropdown').val($(this).text());
         draw();
    });
    
    $('.yAxisOptions li a').click(function(){
-        $('#yDropdown').text($(this).text());
+        // $('#yDropdown').html($(this).text());
+        $('#yDropdown').html($(this).text()+'<span class="caret"></span>');
         // $('#yDropdown').val($(this).text());
         draw();
    });
