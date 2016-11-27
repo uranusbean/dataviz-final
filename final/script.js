@@ -3,7 +3,7 @@ var m = {t:50,r:50,b:50,l:50},
     w = document.getElementById('canvas').clientWidth - m.l - m.r,
     h = document.getElementById('canvas').clientHeight - m.t - m.b,
     hLable = h+100,
-    wLable = w-100;
+    wLable = w-70;
 
 var plot = d3.select('.canvas')
     .append('svg')
@@ -41,19 +41,93 @@ var scaleColorRoom = d3.scaleOrdinal()
     .range(['#fd6b5a','#06ce98','#2175bc']),
     scaleColorPolicy = d3.scaleOrdinal()
     .range(['#03afeb','orange','#06ce98','#fd6b5a']);
-var scaleX = d3.scaleLinear()
-    // .exponent(.2)   
+// var scaleX = d3.scaleLinear()
+//     .domain([0, 20])
+//     .range([0,w]);   
+// var scaleY = d3.scaleLinear()
+//     .domain([0,300])
+//     .range([h,0]);
+var scaleXminNights = d3.scaleLinear()
     .domain([0, 20])
-    .range([0,w]);   
-var scaleY = d3.scaleLinear()
+    .range([0,w]);  
+var scaleYminNights = d3.scaleLinear()
+    .domain([0, 20])
+    .range([h,0]);  
+
+var scaleXcleaningFee = d3.scaleLinear()
+    .domain([0,300])
+    .range([0,w]);    
+var scaleYcleaningFee = d3.scaleLinear()
     .domain([0,300])
     .range([h,0]);
+    
+var scaleXreviewsPerMonth = d3.scaleLinear()
+    .domain([0, 20])
+    .range([0,w]);
+var scaleYreviewsPerMonth = d3.scaleLinear()
+    .domain([0, 20])
+    .range([h,0]);
+    
+var scaleXprice = d3.scaleLinear()
+    .domain([0,1300])
+    .range([0,w]);    
+var scaleYprice = d3.scaleLinear()
+    .domain([0,1300])
+    .range([h,0]);
+    
+var scaleXcalculatedHostListing = d3.scaleLinear()
+    .domain([0, 62])
+    .range([0,w]);   
+var scaleYcalculatedHostListing = d3.scaleLinear()
+    .domain([0, 62])
+    .range([h,0]);
+    
+// var scaleXsecDeposit = d3.scaleLinear()
+//     .domain([0, 162])
+//     .range([0,w]);
+// var scaleYsecDeposit = d3.scaleLinear()
+//     .domain([0, 162])
+//     .range([h,0]);
 
-var axisX = d3.axisBottom()  
-    .scale(scaleX)
+// var axisX = d3.axisBottom()  
+//     .scale(scaleX)
+//     .tickSize(-h);
+// var axisY = d3.axisLeft()
+//     .scale(scaleY)
+//     .tickSize(-w);
+var axisXscaleXminNights = d3.axisBottom()  
+    .scale(scaleXminNights)
     .tickSize(-h);
-var axisY = d3.axisLeft()
-    .scale(scaleY)
+var axisYscaleYminNights = d3.axisLeft()
+    .scale(scaleYminNights)
+    .tickSize(-w);
+    
+var axisXscaleXcleaningFee = d3.axisBottom()  
+    .scale(scaleXcleaningFee)
+    .tickSize(-h);
+var axisYscaleYcleaningFee = d3.axisLeft()
+    .scale(scaleYcleaningFee)
+    .tickSize(-w);
+
+var axisXscaleXreviewsPerMonth = d3.axisBottom()  
+    .scale(scaleXreviewsPerMonth)
+    .tickSize(-h);
+var axisYscaleYreviewsPerMonth = d3.axisLeft()
+    .scale(scaleYreviewsPerMonth)
+    .tickSize(-w);
+
+var axisXscaleXprice = d3.axisBottom()  
+    .scale(scaleXprice)
+    .tickSize(-h);
+var axisYscaleYprice = d3.axisLeft()
+    .scale(scaleYprice)
+    .tickSize(-w);
+
+var axisXscaleXcalculatedHostListing = d3.axisBottom()  
+    .scale(scaleXcalculatedHostListing)
+    .tickSize(-h);
+var axisYscaleYcalculatedHostListing = d3.axisLeft()
+    .scale(scaleYcalculatedHostListing)
     .tickSize(-w);
  
 //Mapping - define projection, define path 
@@ -122,6 +196,8 @@ function preprocessData(data){
         } 
     })
     addButtonGroups();
+    $('#xDropdown').text('Minimum Nights');
+    $('#yDropdown').text('Cleaning Fee');
 }
 
 function dataloaded(err, data){
@@ -304,31 +380,68 @@ function familyPetsBtnClickHandler(familyPets) {
 }
 
 function drawAxis(){
-
     plot.append('g').attr('class','axis axis-x')
         .attr('transform','translate(0,'+h+')')
-        .call(axisX);
+        .call(axisXscaleXminNights);
     plot.append('g').attr('class','axis axis-y')
-        .call(axisY);
+        .call(axisYscaleYcleaningFee);
+    
+    if ($('#xDropdown').text() == 'Minimum Nights') {
+        plot.append('g').attr('class','axis axis-x')
+        .attr('transform','translate(0,'+h+')')
+        .call(axisXscaleXminNights);
+    }else if ($('#xDropdown').text() == 'Reviews Per Month'){
+        plot.append('g').attr('class','axis axis-x')
+        .call(axisXscaleXreviewsPerMonth);
+    }else if ($('#xDropdown').text() == 'Cleaning Fee'){
+        plot.append('g').attr('class','axis axis-x')
+        .call(axisXscaleXcleaningFee);
+    }else if ($('#xDropdown').text() == 'Price'){
+        plot.append('g').attr('class','axis axis-x')
+        .call(axisXscaleXprice);
+    }else if ($('#xDropdown').text() == 'Calculated Host Listings'){
+        plot.append('g').attr('class','axis axis-x')
+        .call(axisXscaleXcalculatedHostListing);
+    };
+    
+    if ($('#yDropdown').text() == 'Minimum Nights') {
+        plot.append('g').attr('class','axis axis-y')
+        // .attr('transform','translate(0,'+h+')')
+        .call(axisYscaleYminNights);
+    }else if ($('#yDropdown').text() == 'Reviews Per Month'){
+        plot.append('g').attr('class','axis axis-y')
+        .call(axisYscaleYreviewsPerMonth);
+    }else if ($('#yDropdown').text() == 'Cleaning Fee'){
+        plot.append('g').attr('class','axis axis-y')
+        .call(axisYscaleYcleaningFee);
+    }else if ($('#yDropdown').text() == 'Price'){
+        plot.append('g').attr('class','axis axis-y')
+        .call(axisYscaleYprice);
+    }else if ($('#yDropdown').text() == 'Calculated Host Listings'){
+        plot.append('g').attr('class','axis axis-y')
+        .call(axisYscaleYcalculatedHostListing);
+    };
+    
+
         
     $('.xAxisOptions').css('left', wLable).css('top', hLable);
-    $('.yAxisOptions').css('left', 200).css('top', 140).css('position','fixed');
+    $('.yAxisOptions').css('left', 150).css('top', 140).css('position','fixed');
     // $('.yAxisOptions').css('left', -50).css('top', 30);
     
     $('.xAxisOptions li a').click(function(){
         $('#xDropdown').text($(this).text());
-        $('#xDropdown').val($(this).text());
+        // $('#xDropdown').val($(this).text());
+        draw();
    });
    
    $('.yAxisOptions li a').click(function(){
         $('#yDropdown').text($(this).text());
-        $('#yDropdown').val($(this).text());
+        // $('#yDropdown').val($(this).text());
+        draw();
    });
 }
 
-   
-
-
+ 
 // Close the dropdown if the user clicks outside of it
 // window.onclick = function(event) {
 //   if (!event.target.matches('.dropbtn')) {
@@ -360,7 +473,6 @@ function canvasControl(){
         drawAxis();
         $('path').css('display','none');
         draw();
-        map.moveToBack();
     });
     
     d3.select('#mapBtn').on('click',function(){
@@ -448,14 +560,36 @@ function draw(){
     nodeEnter.select('circle')
         .attr('cx',function(d){
             if (controlBtnId == 1){
-                return scaleX(d.minNights);
+                if($('#xDropdown').text() == 'Minimum Nights'){
+                    return scaleXminNights(d.minNights);
+                }else if($('#xDropdown').text() == 'Reviews Per Month'){
+                    return scaleXreviewsPerMonth(d.reviewsPerMonth);
+                }else if($('#xDropdown').text() == 'Cleaning Fee'){
+                    return scaleXcleaningFee(d.cleaningFee);
+                }else if($('#xDropdown').text() == 'Price'){
+                    return scaleXprice(d.price);
+                }else if($('#xDropdown').text() == 'Calculated Host Listings'){
+                    return scaleXcalculatedHostListing(d.calculatedHostListing);
+                }; 
+                
             }else if(controlBtnId ==2) {
                 return projection([d.lon,d.lat])[0];
             }
         })
         .attr('cy',function(d){
             if (controlBtnId == 1){
-                return scaleY(d.cleaningFee);
+                if($('#yDropdown').text() == 'Minimum Nights'){
+                    return scaleYminNights(d.minNights);
+                }else if($('#yDropdown').text() == 'Reviews Per Month'){
+                    return scaleYreviewsPerMonth(d.reviewsPerMonth);
+                }else if($('#yDropdown').text() == 'Cleaning Fee'){
+                    return scaleYcleaningFee(d.cleaningFee);
+                }else if($('#yDropdown').text() == 'Price'){
+                    return scaleYprice(d.price);
+                }else if($('#yDropdown').text() == 'Calculated Host Listings'){
+                    return scaleYcalculatedHostListing(d.calculatedHostListing);
+                };
+                
             }else if(controlBtnId ==2) {
                 return projection([d.lon,d.lat])[1];
             }
@@ -468,17 +602,40 @@ function draw(){
         // .attr('cy',function(d){return scaleY(d.cleaningFee);})
         .attr('cx',function(d){
             if (controlBtnId == 1){
-                return scaleX(d.minNights);
+                if($('#xDropdown').text() == 'Minimum Nights'){
+                    // console.log($('#xDropdown').val());
+                    return scaleXminNights(d.minNights);
+                }else if($('#xDropdown').text() == 'Reviews Per Month'){
+                    return scaleXreviewsPerMonth(d.reviewsPerMonth);
+                }else if($('#xDropdown').text() == 'Cleaning Fee'){
+                    return scaleXcleaningFee(d.cleaningFee);
+                }else if($('#xDropdown').text() == 'Price'){
+                    return scaleXprice(d.price);
+                }else if($('#xDropdown').text() == 'Calculated Host Listings'){
+                    return scaleXcalculatedHostListing(d.calculatedHostListing);
+                };
+                // return scaleX(d.secDeposit);
             }else if(controlBtnId ==2) {
                 return projection([d.lon,d.lat])[0];
             }
         })
         .attr('cy',function(d){
             if (controlBtnId == 1){
-                return scaleY(d.cleaningFee);
+                    if($('#yDropdown').text() == 'Minimum Nights'){
+                        return scaleYminNights(d.minNights);
+                    }else if($('#yDropdown').text() == 'Reviews Per Month'){
+                        return scaleYreviewsPerMonth(d.reviewsPerMonth);
+                    }else if($('#yDropdown').text() == 'Cleaning Fee'){
+                        return scaleYcleaningFee(d.cleaningFee);
+                    }else if($('#yDropdown').text() == 'Price'){
+                        return scaleYprice(d.price);
+                    }else if($('#yDropdown').text() == 'Calculated Host Listings'){
+                        return scaleYcalculatedHostListing(d.calculatedHostListing);
+                    };
+                // return scaleY(d.price);
             }else if(controlBtnId ==2) {
                 return projection([d.lon,d.lat])[1];    
-            }
+            };
         })
         .style("fill", function(d) { 
             if($('input[name=optradio]:checked').val() == 'roomType'){
