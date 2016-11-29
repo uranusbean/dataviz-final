@@ -5,6 +5,7 @@
 
 .container h1 {
     margin-left: 5%;
+    /*margin-bottom: 3%;*/
 }
 
 .row-no-padding {
@@ -53,8 +54,18 @@
     text-transform: capitalize;
 }
 
-.chartBtn .mapBtn {
+.chartMapControl {
+    margin-left: 5%;
+    margin-top: 2%;
+}
+
+#chartBtn, #mapBtn {
     color: black;
+    border-radius: 0;
+}
+
+#mapBtn {
+    margin-left: -4px;
 }
 
 .dropdown-toggle {

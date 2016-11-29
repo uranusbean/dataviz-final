@@ -81,13 +81,6 @@ var scaleXcalculatedHostListing = d3.scaleLinear()
 var scaleYcalculatedHostListing = d3.scaleLinear()
     .domain([0, 62])
     .range([h,0]);
-    
-// var scaleXsecDeposit = d3.scaleLinear()
-//     .domain([0, 162])
-//     .range([0,w]);
-// var scaleYsecDeposit = d3.scaleLinear()
-//     .domain([0, 162])
-//     .range([h,0]);
 
 // var axisX = d3.axisBottom()  
 //     .scale(scaleX)
@@ -131,8 +124,8 @@ var axisYscaleYcalculatedHostListing = d3.axisLeft()
     .tickSize(-w);
  
 //Mapping - define projection, define path 
-var projection = d3.geoAlbers()
-    .scale(240000)
+var projection = d3.geoMercator()
+    .scale(200000)
     .rotate([71.068,0])
     .center([0,42.355])
     .translate([w/2,h/4])
@@ -385,7 +378,8 @@ function drawAxis(){
     //     .call(axisXscaleXminNights);
     // plot.append('g').attr('class','axis axis-y')
     //     .call(axisYscaleYcleaningFee);
-    
+    $('.axis-x').hide();
+    $('.axis-y').hide();
     if ($('#xDropdown').text() == 'Minimum Nights') {
         plot.append('g').attr('class','axis axis-x')
             .attr('transform','translate(0,'+h+')')
@@ -413,7 +407,6 @@ function drawAxis(){
             .call(axisYscaleYminNights);
     }else if ($('#yDropdown').text() == 'Reviews Per Month'){
         plot.append('g').attr('class','axis axis-y')
-            .attr('transform','translate('+w+',0)')
             .call(axisYscaleYreviewsPerMonth);
     }else if ($('#yDropdown').text() == 'Cleaning Fee'){
         plot.append('g').attr('class','axis axis-y')
@@ -434,6 +427,7 @@ function drawAxis(){
         // $('#xDropdown').html($(this).text());
         $('#xDropdown').html($(this).text()+'<span class="caret"></span>');
         // $('#xDropdown').val($(this).text());
+        drawAxis();
         draw();
    });
    
@@ -441,6 +435,7 @@ function drawAxis(){
         // $('#yDropdown').html($(this).text());
         $('#yDropdown').html($(this).text()+'<span class="caret"></span>');
         // $('#yDropdown').val($(this).text());
+        drawAxis();
         draw();
    });
 }
@@ -476,6 +471,8 @@ function canvasControl(){
         if(controlBtnId == 1) return; 
         controlBtnId = 1; 
         drawAxis();
+        $('.xAxisOptions').show();
+        $('.yAxisOptions').show();
         $('path').css('display','none');
         draw();
     });
@@ -484,8 +481,12 @@ function canvasControl(){
         if(controlBtnId == 2) return; 
         controlBtnId = 2;
         drawMap();
-        $('.axis-x').css('display','none');
-        $('.axis-y').css('display','none');
+        $('.axis-x').hide();
+        $('.axis-y').hide();
+        $('.xAxisOptions').hide();
+        $('.yAxisOptions').hide();
+        // $('.axis-x').css('display','none');
+        // $('.axis-y').css('display','none');
         draw();
     });
 }
@@ -526,15 +527,17 @@ function draw(){
             tooltip.selectAll('.title')
                 .html('Host: '+ d.id);
             tooltip.select('.value1')
-                .html(d.reviewsPerMonth +' reviews/ month');
-            tooltip.select('.value2')
                 .html('$'+ d.price + '/ night');
-            tooltip.select('.value3')
-                .html('Cancel Policy: '+d.cancelPolicy);
-            tooltip.select('.value4')
+            tooltip.select('.value2')
                 .html('Minimum Nights: '+d.minNights);
-            tooltip.select('.value5')
+            tooltip.select('.value3')
                 .html('Monthly Income: $'+d.monthlyIncome);
+            tooltip.select('.value4')
+                .html('Location: '+d.neighbourhood);
+            tooltip.select('.value5')
+                .html(d.reviewsPerMonth +' reviews/ month');
+            tooltip.select('.value6')
+                .html('Cancel Policy: '+d.cancelPolicy);
             tooltip.transition()
                 .style('opacity',1)
                 .style('visibility','visible');
@@ -564,6 +567,8 @@ function draw(){
     //     .merge(node);  --nodes appear everytime clicking on the btn
 
     nodeEnter.select('circle')
+        // .attr('cx',0)
+        .attr('cy',h)
         .attr('cx',function(d){
             if (controlBtnId == 1){
                 if($('#xDropdown').text() == 'Minimum Nights'){
@@ -581,31 +586,30 @@ function draw(){
             }else if(controlBtnId ==2) {
                 return projection([d.lon,d.lat])[0];
             }
-        })
-        .attr('cy',function(d){
-            if (controlBtnId == 1){
-                if($('#yDropdown').text() == 'Minimum Nights'){
-                    return scaleYminNights(d.minNights);
-                }else if($('#yDropdown').text() == 'Reviews Per Month'){
-                    return scaleYreviewsPerMonth(d.reviewsPerMonth);
-                }else if($('#yDropdown').text() == 'Cleaning Fee'){
-                    return scaleYcleaningFee(d.cleaningFee);
-                }else if($('#yDropdown').text() == 'Price'){
-                    return scaleYprice(d.price);
-                }else if($('#yDropdown').text() == 'Calculated Host Listings'){
-                    return scaleYcalculatedHostListing(d.calculatedHostListing);
-                };
-                
-            }else if(controlBtnId ==2) {
-                return projection([d.lon,d.lat])[1];
-            }
         });
+        // .attr('cy',function(d){
+        //     if (controlBtnId == 1){
+        //         if($('#yDropdown').text() == 'Minimum Nights'){
+        //             return scaleYminNights(d.minNights);
+        //         }else if($('#yDropdown').text() == 'Reviews Per Month'){
+        //             return scaleYreviewsPerMonth(d.reviewsPerMonth);
+        //         }else if($('#yDropdown').text() == 'Cleaning Fee'){
+        //             return scaleYcleaningFee(d.cleaningFee);
+        //         }else if($('#yDropdown').text() == 'Price'){
+        //             return scaleYprice(d.price);
+        //         }else if($('#yDropdown').text() == 'Calculated Host Listings'){
+        //             return scaleYcalculatedHostListing(d.calculatedHostListing);
+        //         };
+                
+        //     }else if(controlBtnId ==2) {
+        //         return projection([d.lon,d.lat])[1];
+        //     }
+        // });
     
     nodeEnter.merge(node)
         .select('circle')
         .transition()
         .duration(1000)
-        // .attr('cy',function(d){return scaleY(d.cleaningFee);})
         .attr('cx',function(d){
             if (controlBtnId == 1){
                 if($('#xDropdown').text() == 'Minimum Nights'){
@@ -659,7 +663,12 @@ function draw(){
         })
         .style('opacity',0.7);
     //EXIT
-    node.exit().remove();
+    node.exit()
+        .transition()
+        .duration(500)
+        .attr('cy',0)
+        .style('opacity',0)
+        .remove();
 } 
 
 $('.roomTypeRadioBtn').click(function(){
