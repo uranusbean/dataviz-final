@@ -48,10 +48,10 @@ var scaleColorRoom = d3.scaleOrdinal()
 //     .domain([0,300])
 //     .range([h,0]);
 var scaleXminNights = d3.scaleLinear()
-    .domain([0, 20])
+    .domain([0, 30])
     .range([0,w]);  
 var scaleYminNights = d3.scaleLinear()
-    .domain([0, 20])
+    .domain([0, 30])
     .range([h,0]);  
 
 var scaleXcleaningFee = d3.scaleLinear()
@@ -190,7 +190,7 @@ function preprocessData(data){
     })
     addButtonGroups();
     $('#xDropdown').html('Minimum Nights<span class="caret"></span>');
-    $('#yDropdown').html('Cleaning Fee<span class="caret"></span>');
+    $('#yDropdown').html('Price<span class="caret"></span>');
 }
 
 function dataloaded(err, data){
@@ -238,7 +238,7 @@ function colorBasedOnFilter() {
                 if(isBtnGroupColorPelette(btnContent)){
                     return scaleColorPolicy(btnContent)
                 } else {
-                    return '#484848';
+                    return '#969696';
                 } 
             } else {
                 return 'white';
@@ -423,22 +423,24 @@ function drawAxis(){
     // $('.yAxisOptions').css('left', 150).css('top', 140).css('position','fixed');
     $('.yAxisOptions').css('left', -100).css('top', 30);
     
-    $('.xAxisOptions li a').click(function(){
-        // $('#xDropdown').html($(this).text());
-        $('#xDropdown').html($(this).text()+'<span class="caret"></span>');
-        // $('#xDropdown').val($(this).text());
-        drawAxis();
-        draw();
-   });
-   
-   $('.yAxisOptions li a').click(function(){
-        // $('#yDropdown').html($(this).text());
-        $('#yDropdown').html($(this).text()+'<span class="caret"></span>');
-        // $('#yDropdown').val($(this).text());
-        drawAxis();
-        draw();
-   });
+    
 }
+
+$('.xAxisOptions li a').click(function(){
+    // $('#xDropdown').html($(this).text());
+    $('#xDropdown').html($(this).text()+'<span class="caret"></span>');
+    // $('#xDropdown').val($(this).text());
+    drawAxis();
+    draw();
+});
+
+$('.yAxisOptions li a').click(function(){
+    // $('#yDropdown').html($(this).text());
+    $('#yDropdown').html($(this).text()+'<span class="caret"></span>');
+    // $('#yDropdown').val($(this).text());
+    drawAxis();
+    draw();
+});
 
  
 // Close the dropdown if the user clicks outside of it
@@ -468,6 +470,7 @@ function drawMap(){
 
 function canvasControl(){
     d3.select('#chartBtn').on('click',function(){
+        // d3.select('#chartBtn').attr('class','controlBtnActive');
         if(controlBtnId == 1) return; 
         controlBtnId = 1; 
         drawAxis();
@@ -478,6 +481,7 @@ function canvasControl(){
     });
     
     d3.select('#mapBtn').on('click',function(){
+        // d3.select('#mapBtn').attr('class','controlBtnActive');
         if(controlBtnId == 2) return; 
         controlBtnId = 2;
         drawMap();
@@ -498,7 +502,7 @@ function draw(){
         maxX = d3.max(dataSet, function(d){return d.monthlyIncome;}); 
     var scaleIncome = d3.scaleLinear()
         .domain([minX, maxX])
-        .range([1,20]);
+        .range([1,15]);
     
     var filteredDataSet = dataSet.filter(function(entry){
         if(!filterStatus.roomTypes.selected.has(entry.roomType)) return false;

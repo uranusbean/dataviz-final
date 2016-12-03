@@ -59,15 +59,23 @@
     margin-top: 2%;
 }
 
-#chartBtn, #mapBtn {
-    color: black;
-    border-radius: 0;
-}
+/*#chartBtn, #mapBtn {*/
+/*    color: black;*/
+/*    border-radius: 0;*/
+/*}*/
 
-#mapBtn {
-    margin-left: -4px;
-}
+/*#mapBtn {*/
+/*    margin-left: -4px;*/
+/*}*/
 
 .dropdown-toggle {
     border: none;
+}
+
+.btn:focus,.btn:active {
+   outline: none !important;
+}
+
+.btn-default:hover {
+  background-color: #e2e2e2;
 }
