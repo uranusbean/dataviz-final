@@ -11,6 +11,10 @@ var plot = d3.select('.canvas')
     .attr('height', h + m.t + m.b +100)
     .append('g')
     .attr('transform','translate('+ m.l+','+ m.t+')');
+ 
+var axisLayer = plot.append('g');
+var mapLayer = plot.append('g');
+var dataLayer = plot.append('g');
 
 var dataSet;
 
@@ -131,7 +135,7 @@ var projection = d3.geoMercator()
     .translate([w/2,h/4])
     
 var path = d3.geoPath().projection(projection);
-var map = plot.selectAll('path')
+var map = mapLayer.selectAll('path')
         .data(neighborhoods_json.features);
         
 var controlBtnId =1;
@@ -195,8 +199,8 @@ function preprocessData(data){
 
 function dataloaded(err, data){
     preprocessData(data);
-    drawAxis();
     draw();
+    drawAxis();
 } 
 
 function addButtonGroups(){
@@ -373,49 +377,44 @@ function familyPetsBtnClickHandler(familyPets) {
 }
 
 function drawAxis(){
-    // plot.append('g').attr('class','axis axis-x')
-    //     .attr('transform','translate(0,'+h+')')
-    //     .call(axisXscaleXminNights);
-    // plot.append('g').attr('class','axis axis-y')
-    //     .call(axisYscaleYcleaningFee);
     $('.axis-x').hide();
     $('.axis-y').hide();
     if ($('#xDropdown').text() == 'Minimum Nights') {
-        plot.append('g').attr('class','axis axis-x')
+        axisLayer.append('g').attr('class','axis axis-x')
             .attr('transform','translate(0,'+h+')')
             .call(axisXscaleXminNights);
     }else if ($('#xDropdown').text() == 'Reviews Per Month'){
-        plot.append('g').attr('class','axis axis-x')
+        axisLayer.append('g').attr('class','axis axis-x')
             .attr('transform','translate(0,'+h+')')
             .call(axisXscaleXreviewsPerMonth);
     }else if ($('#xDropdown').text() == 'Cleaning Fee'){
-        plot.append('g').attr('class','axis axis-x')
+        axisLayer.append('g').attr('class','axis axis-x')
             .attr('transform','translate(0,'+h+')')
             .call(axisXscaleXcleaningFee);
     }else if ($('#xDropdown').text() == 'Price'){
-        plot.append('g').attr('class','axis axis-x')
+        axisLayer.append('g').attr('class','axis axis-x')
             .attr('transform','translate(0,'+h+')')
             .call(axisXscaleXprice);
     }else if ($('#xDropdown').text() == 'Calculated Host Listings'){
-        plot.append('g').attr('class','axis axis-x')
+        axisLayer.append('g').attr('class','axis axis-x')
             .attr('transform','translate(0,'+h+')')
             .call(axisXscaleXcalculatedHostListing);
     };
     
     if ($('#yDropdown').text() == 'Minimum Nights') {
-        plot.append('g').attr('class','axis axis-y')
+        axisLayer.append('g').attr('class','axis axis-y')
             .call(axisYscaleYminNights);
     }else if ($('#yDropdown').text() == 'Reviews Per Month'){
-        plot.append('g').attr('class','axis axis-y')
+        axisLayer.append('g').attr('class','axis axis-y')
             .call(axisYscaleYreviewsPerMonth);
     }else if ($('#yDropdown').text() == 'Cleaning Fee'){
-        plot.append('g').attr('class','axis axis-y')
+        axisLayer.append('g').attr('class','axis axis-y')
             .call(axisYscaleYcleaningFee);
     }else if ($('#yDropdown').text() == 'Price'){
-        plot.append('g').attr('class','axis axis-y')
+        axisLayer.append('g').attr('class','axis axis-y')
             .call(axisYscaleYprice);
     }else if ($('#yDropdown').text() == 'Calculated Host Listings'){
-        plot.append('g').attr('class','axis axis-y')
+        axisLayer.append('g').attr('class','axis axis-y')
             .call(axisYscaleYcalculatedHostListing);
     };
         
@@ -462,7 +461,7 @@ function drawMap(){
     map.enter()
         .append('path')
         .attr('fill','#ddd')
-        .style('opacity',0.3)
+        .style('opacity',0.5)
         .attr('d',path);
     map.exit()
         .remove();
@@ -470,7 +469,8 @@ function drawMap(){
 
 function canvasControl(){
     d3.select('#chartBtn').on('click',function(){
-        // d3.select('#chartBtn').attr('class','controlBtnActive');
+        $('#chartBtn').css('background','#d8d8d8');
+        $('#mapBtn').css('background','white');
         if(controlBtnId == 1) return; 
         controlBtnId = 1; 
         drawAxis();
@@ -481,7 +481,8 @@ function canvasControl(){
     });
     
     d3.select('#mapBtn').on('click',function(){
-        // d3.select('#mapBtn').attr('class','controlBtnActive');
+        $('#chartBtn').css('background','white');
+        $('#mapBtn').css('background','#d8d8d8');
         if(controlBtnId == 2) return; 
         controlBtnId = 2;
         drawMap();
@@ -489,8 +490,6 @@ function canvasControl(){
         $('.axis-y').hide();
         $('.xAxisOptions').hide();
         $('.yAxisOptions').hide();
-        // $('.axis-x').css('display','none');
-        // $('.axis-y').css('display','none');
         draw();
     });
 }
@@ -513,7 +512,7 @@ function draw(){
         return true;
     });
     
-    var node = plot.selectAll('.node')
+    var node = dataLayer.selectAll('.node')
         .data(filteredDataSet,function(d){return d.id});
         
     //ENTER
@@ -529,19 +528,22 @@ function draw(){
         .on('mouseenter',function(d){
             var tooltip = d3.select('.custom-tooltip');
             tooltip.selectAll('.title')
-                .html('Host: '+ d.id);
+                .html('Host: '+ d.hostName);
             tooltip.select('.value1')
                 .html('$'+ d.price + '/ night');
-            tooltip.select('.value2')
-                .html('Minimum Nights: '+d.minNights);
+            tooltip.select('.value2')    
+                .html(d.reviewsPerMonth +' reviews/month');
             tooltip.select('.value3')
-                .html('Monthly Income: $'+d.monthlyIncome);
+                .html("<b>Minimum Nights:</b><span style='color:#929292' class='tooltipValue'>"+d.minNights+ "</span>");
             tooltip.select('.value4')
-                .html('Location: '+d.neighbourhood);
+                .html("<b>Monthly Income:</b><span style='color:#929292' class='tooltipValue'>"+'$'+d.monthlyIncome+ "</span>");
+                // .html('Monthly Income: $'+d.monthlyIncome);
             tooltip.select('.value5')
-                .html(d.reviewsPerMonth +' reviews/ month');
+                .html("<b>Neighbourhood:</b><span style='color:#929292' class='tooltipValue'>"+d.neighbourhood+ "</span>");
+                // .html('Neighbourhood: '+d.neighbourhood);
             tooltip.select('.value6')
-                .html('Cancel Policy: '+d.cancelPolicy);
+                .html("<b>Cancel Policy: </b><span style='color:#929292' class='tooltipValue'>"+d.cancelPolicy+ "</span>");
+                // .html('Cancel Policy: '+d.cancelPolicy);
             tooltip.transition()
                 .style('opacity',1)
                 .style('visibility','visible');

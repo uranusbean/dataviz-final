@@ -40,14 +40,20 @@
 }
 
 .custom-tooltip {
-    /*width: 100px;*/
+    /*width: 200px;*/
     /*height: 60px;*/
     border: 1px solid #ddd;
     border-radius: 8px;
     opacity: 1;
-    background: #eee;
-    padding: 3px;
+    padding: 0 10px 0 10px;
+}
+
+.custom-tooltip .title{
+    font-size:1.2em;
+    font-weight:bold;
     text-align: center;
+    padding: 3%;
+    border-bottom: 1px solid #969696;
 }
 
 .filterSection {
@@ -78,4 +84,8 @@
 
 .btn-default:hover {
   background-color: #e2e2e2;
+}
+
+.tooltipValue {
+    float: right;
 }

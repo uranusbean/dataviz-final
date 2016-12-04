@@ -13,7 +13,7 @@ body {
 }
 .custom-tooltip{
     position:absolute;
-    width:180px;
+    width:200px;
     min-height:50px;
     padding:10px 5px;
     background:white;
@@ -23,9 +23,4 @@ body {
     visibility:hidden;
     opacity:0;
 }
-
-.custom-tooltip .title{
-    font-size:1.2em;
-    font-weight:bold;
-    }
 
