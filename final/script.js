@@ -1,7 +1,7 @@
 console.log('final project');
 var m = {t:50,r:50,b:50,l:50},
     w = document.getElementById('canvas').clientWidth - m.l - m.r,
-    h = document.getElementById('canvas').clientHeight - m.t,
+    h = document.getElementById('canvas').clientHeight - m.t -m.b,
     hLable = h+100,
     wLable = w-70;
 

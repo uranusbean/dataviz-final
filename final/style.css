@@ -29,14 +29,26 @@ header {
     margin-top: 15px;
 }
 
+/*.filterHeader, .radio {*/
+/*    display: inline-block;*/
+/*}*/
+.filterHeader {
+    float: left;
+}
+
+.radio {
+    float: right;
+    margin: 0;
+}
+
+.filterSection>.btn-group {
+    margin-top: 5px;
+    margin-bottom: 2%;
+}
+
 .filterTitle{
     font-weight: bold;
     font-family: 'Roboto', sans-serif;
-}
-
-.filterSection, .radio {
-    display: inline-block;
-    /*margin-right: 15%;*/
 }
 
 .btn-group p {
