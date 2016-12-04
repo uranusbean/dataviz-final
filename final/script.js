@@ -1,7 +1,7 @@
 console.log('final project');
 var m = {t:50,r:50,b:50,l:50},
     w = document.getElementById('canvas').clientWidth - m.l - m.r,
-    h = document.getElementById('canvas').clientHeight - m.t - m.b,
+    h = document.getElementById('canvas').clientHeight - m.t,
     hLable = h+100,
     wLable = w-70;
 
@@ -170,7 +170,8 @@ plot.append('circle')
     .attr('cy', h+70)
     .style('stroke', '#484848')
     .style('fill','white');
-    
+
+// Filter data that are not satisfying the standard
 function preprocessData(data){
     dataSet = data;
     dataSet = dataSet.filter(function(entry){
@@ -306,7 +307,8 @@ function neighbourhoodBtnClickHandler(neighbourhood){
     }
   
     if (filterStatus.neighbourLocations.selected.has(neighbourhood)) {
-        d3.select(this).style('background','#337ab7');
+        d3.select(this).style('background','#337ab7')
+        .style('color','white');
     } else {
         d3.select(this)
             .style('background','white')
@@ -346,7 +348,8 @@ function amenitiesBtnClickHandler(amenities) {
     }
   
     if (filterStatus.amenitiesTypes.selected.has(amenities)) {
-        d3.select(this).style('background','#337ab7');
+        d3.select(this).style('background','#337ab7')
+        .style('color','white');
     } else {
         d3.select(this)
             .style('background','white')
@@ -365,7 +368,8 @@ function familyPetsBtnClickHandler(familyPets) {
     }
   
     if (filterStatus.familyPets.selected.has(familyPets)) {
-        d3.select(this).style('background','#337ab7');
+        d3.select(this).style('background','#337ab7')
+        .style('color','white');
     } else {
         d3.select(this)
             .style('background','white')
@@ -530,9 +534,9 @@ function draw(){
             tooltip.selectAll('.title')
                 .html('Host: '+ d.hostName);
             tooltip.select('.value1')
-                .html('$'+ d.price + '/ night');
+                .html('<b>$'+ d.price + '/ night</b>');
             tooltip.select('.value2')    
-                .html(d.reviewsPerMonth +' reviews/month');
+                .html('<b>'+d.reviewsPerMonth +' reviews/month</b>');
             tooltip.select('.value3')
                 .html("<b>Minimum Nights:</b><span style='color:#929292' class='tooltipValue'>"+d.minNights+ "</span>");
             tooltip.select('.value4')

@@ -13,9 +13,12 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 <body>
+<header>
+    <div id="title"><h1>What We Learn from Airbnb Popular Hosts</h1></div>
+    <div id="subTitle">How To Make More Money On Airbnb In Boston</div>
+</header>
 <div class="container">
-    <div class="row row-no-padding">
-        <h1>How To Make More Money On Airbnb In Boston</h1>
+    <div class="row row-no-padding vizContent">
         <div class="col-sm-8">
             <div class="btn-group chartMapControl" role="group">
                 <button type="button" class="btn btn-default" id="chartBtn">Chart</button>
@@ -57,7 +60,11 @@
             <div class="filterSection"> 
                 <div>
                     <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> 
-                    <span class="filterTitle"> Room Type</span>
+                    <span class="filterTitle"> 
+                        Room Type 
+                        <!--<span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="roomTypeQuestion"></span>-->
+                    </span>
+                    
                 </div>
                 <div class="radio"> 
                     <label><input checked type="radio" name="optradio" value="roomType" class="roomTypeRadioBtn">Use as color pelette</label>
@@ -119,7 +126,20 @@
             <p class="value5"></p>
             <p class="value6"></p>
         </div>
-     </div>
+    </div>
+    <div class="about">
+        <div class="aboutTitle">About The Visualization</div>
+        <div id="aboutVizContent">
+            
+        </div>
+    </div>
+    <div class="about">
+        <div class="aboutTitle">Acknowledgments</div>
+        <div id="aboutDataContent">
+            This visualization was created in <a href="https://d3js.org/">D3.js</a> by Yixuan (Janice) Zhang. 
+            The data can be accessible via <a href="http://insideairbnb.com/get-the-data.html/">Inside Airbnb</a>.
+        </div>
+    </div>
 </div>
 
 <script src="neighborhoods.js"></script>

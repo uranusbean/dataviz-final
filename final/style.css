@@ -1,6 +1,18 @@
+header {
+    width: 100%;
+    padding: 25px;
+    padding-left: 10%;
+    background: #ff5a5f;
+    color: white;
+}
+
+#subTitle{
+    font-size: 1.2em;    
+} 
+
 .container {
     width: 85%;
-    padding: 0;
+    padding-top: 20px;
 }
 
 .container h1 {
@@ -52,8 +64,8 @@
     font-size:1.2em;
     font-weight:bold;
     text-align: center;
-    padding: 3%;
-    border-bottom: 1px solid #969696;
+    padding:5% 0 1% 0;
+    border-bottom: 1px solid #eee;
 }
 
 .filterSection {
@@ -64,15 +76,6 @@
     margin-left: 5%;
     margin-top: 2%;
 }
-
-/*#chartBtn, #mapBtn {*/
-/*    color: black;*/
-/*    border-radius: 0;*/
-/*}*/
-
-/*#mapBtn {*/
-/*    margin-left: -4px;*/
-/*}*/
 
 .dropdown-toggle {
     border: none;
@@ -88,4 +91,20 @@
 
 .tooltipValue {
     float: right;
+}
+
+.vizContent {
+    margin-bottom: 50px;    
+}
+
+.about {
+    margin-bottom: 30px;    
+}
+
+.aboutTitle {
+    text-transform:uppercase;
+    font-size: 1.2em;
+    padding: 20px 0px;
+    /*font-weight:bold;*/
+    /*border-bottom: 1px solid #333333;*/
 }
