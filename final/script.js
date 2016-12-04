@@ -574,9 +574,10 @@ function draw(){
 
     nodeEnter.select('circle')
         // .attr('cx',0)
-        .attr('cy',h)
-        .attr('cx',function(d){
-            if (controlBtnId == 1){
+        // .attr('cy',h/2)
+         .attr('cx',function(d){
+            if(controlBtnId == 1){
+                // return 0;
                 if($('#xDropdown').text() == 'Minimum Nights'){
                     return scaleXminNights(d.minNights);
                 }else if($('#xDropdown').text() == 'Reviews Per Month'){
@@ -588,11 +589,35 @@ function draw(){
                 }else if($('#xDropdown').text() == 'Calculated Host Listings'){
                     return scaleXcalculatedHostListing(d.calculatedHostListing);
                 }; 
-                
-            }else if(controlBtnId ==2) {
-                return projection([d.lon,d.lat])[0];
+            }else if(controlBtnId == 2){
+                return w/2;
+            }
+        })
+        .attr('cy',function(d){
+            if(controlBtnId == 1){
+                return h;
+            }else if(controlBtnId == 2){
+                return h/2;
             }
         });
+        // .attr('cx',function(d){
+        //     if (controlBtnId == 1){
+        //         if($('#xDropdown').text() == 'Minimum Nights'){
+        //             return scaleXminNights(d.minNights);
+        //         }else if($('#xDropdown').text() == 'Reviews Per Month'){
+        //             return scaleXreviewsPerMonth(d.reviewsPerMonth);
+        //         }else if($('#xDropdown').text() == 'Cleaning Fee'){
+        //             return scaleXcleaningFee(d.cleaningFee);
+        //         }else if($('#xDropdown').text() == 'Price'){
+        //             return scaleXprice(d.price);
+        //         }else if($('#xDropdown').text() == 'Calculated Host Listings'){
+        //             return scaleXcalculatedHostListing(d.calculatedHostListing);
+        //         }; 
+                
+        //     }else if(controlBtnId ==2) {
+        //         return projection([d.lon,d.lat])[0];
+        //     }
+        // });
         // .attr('cy',function(d){
         //     if (controlBtnId == 1){
         //         if($('#yDropdown').text() == 'Minimum Nights'){
