@@ -43,16 +43,26 @@ header {
 .radio {
     float: right;
     margin: 0;
+    /*padding-right: 20%;*/
 }
 
 .filterSection>.btn-group {
     margin-top: 5px;
     margin-bottom: 2%;
+    width: 100%;
 }
 
 .filterTitle{
     font-weight: bold;
     font-family: 'Roboto', sans-serif;
+}
+
+.btn-group-roomType>.btnFilter, .btn-group-cancelPolicy>.btnFilter{
+    width: 33.33%;
+}
+
+.btn-group-amenities>.btnFilter,.btn-group-familyPets>.btnFilter, .btn-group-neighbourhood>.btnFilter{
+    width: 25%;
 }
 
 .btn-group p {
@@ -116,13 +126,17 @@ header {
 .about {
     margin-bottom: 30px;    
     padding-left: 4%;
-    padding-right: 5%;
+    padding-right: 4%;
 }
 
 .aboutTitle {
     text-transform:uppercase;
     font-size: 1.2em;
-    padding: 20px 0px;
-    /*font-weight:bold;*/
-    /*border-bottom: 1px solid #333333;*/
+    padding: 10px 0px;
+    font-weight:bold;
+    border-bottom: 1px solid #858585;
+}
+
+.aboutContent {
+    padding-top: 10px;
 }

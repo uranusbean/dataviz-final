@@ -790,15 +790,15 @@ function parse(d){
         if (d.amenities.includes('Wireless')){
             entry.amenities = ' Wifi';
         } else {
-            entry.amenities = 'No TV No Wifi';
+            entry.amenities = 'Neither';
         } 
     } 
     
     if(d.amenities.includes('Family/Kid Friendly')) {
         if (d.amenities.includes('Pets Allowed')){
-            entry.familyPets = 'Kid Friendly + Pets';
+            entry.familyPets = 'Kids + Pets';
         } else {
-            entry.familyPets = 'Kid Friendly';
+            entry.familyPets = 'Kids';
         }
     } else {
         if (d.amenities.includes('Pets Allowed')){

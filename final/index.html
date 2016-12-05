@@ -125,27 +125,34 @@
     </div>
     <div class="about">
         <div class="aboutTitle">About The Visualization</div>
-        <div id="aboutVizContent">
+        <div class="aboutContent">
             In this visualization, each circle represents a host based in Boston. 
             The size of the circle represents the estimated monthly income of that particular host. 
             The larger the circle, the higher the income will be. 
             Both X axis and Y axis contain 5 options, including Minimum nights, 
             Reviews per month, Cleaning fee, Price, Calculated Host Listings. 
-            Users are able to explore these 20 combinations in total.
+            Users are able to explore the relationship among these 20 combinations.
+            
             <p></p>
             The filter section on the righthand side contains 5 dimensions, including
             Room Type, Cancellation Policy, Amenities, Family Pets, and Neighbourhood.
+            Each dimension includes a few filters. Each filter can be seen as a 
+            <i><b>VARIABLE</b></i>.You can select or deselect any variable(s) to 
+            compare and contrast the trend.
             All the filters have been selected as default with the background color light grey. 
-            If deselecting any filter, that filter will turn into white background. 
+            If deselecting any filter, the background of that filter will turn white. 
             Multiple filters can be applied across dimensions. 
-            Only one of the five dimensions can be used as color scheme.
+            Only one of the five dimensions can be used as color palette.
+            For example, select minimum nights from X axis and price from Y axis, 
+            and use Room Type as color palette. You will see 1) the overall price 
+            of entire home will be higher than that of Private Room. 
             <p></p>
             
         </div>
     </div>
     <div class="about">
         <div class="aboutTitle">Acknowledgments</div>
-        <div id="aboutDataContent">
+        <div class="aboutContent">
             This visualization was created in <a href="https://d3js.org/">D3.js</a> by Yixuan (Janice) Zhang. 
             The data can be accessible via <a href="http://insideairbnb.com/get-the-data.html/">Inside Airbnb</a>.
             The code for this visualization is available on <a href="https://github.com/uranusbean/dataviz-final">Github</a>. 
