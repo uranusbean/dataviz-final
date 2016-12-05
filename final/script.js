@@ -138,7 +138,15 @@ var path = d3.geoPath().projection(projection);
 var map = mapLayer.selectAll('path')
         .data(neighborhoods_json.features);
         
-var controlBtnId =1;
+var controlBtnId = 1;
+var colorPaletteOptions = {
+    roomType: 1, 
+    cancelPolicy: 2, 
+    amenities: 3, 
+    familyPets: 4,
+    neighbourhood: 5
+}
+var colorPalette = colorPaletteOptions.roomType;
 
 d3.queue()
     .defer(d3.csv,'../data/airbnb.csv',parse)
@@ -296,10 +304,6 @@ function roomTypeBtnClickHandler(roomType){
 }
 
 function neighbourhoodBtnClickHandler(neighbourhood){
-    // var filteredNeighbour = dataSet.filter(function(entry) {
-    //     return(entry.neighbourhood == neighbourhood);
-    // });
-    // draw(filteredNeighbour);      
     if (filterStatus.neighbourLocations.selected.has(neighbourhood)){
         filterStatus.neighbourLocations.selected.remove(neighbourhood);
     } else {
@@ -646,7 +650,7 @@ function draw(){
     nodeEnter.merge(node)
         .select('circle')
         .transition()
-        .duration(1000)
+        .duration(500)
         .attr('cx',function(d){
             if (controlBtnId == 1){
                 if($('#xDropdown').text() == 'Minimum Nights'){
@@ -685,18 +689,18 @@ function draw(){
             };
         })
         .style("fill", function(d) { 
-            if($('input[name=optradio]:checked').val() == 'roomType'){
-                // console.log($('input[name=optradio]:checked').val());
-                return scaleColorPolicy(d.roomType); 
-            } else if($('input[name=optradio]:checked').val() == 'cancelPolicy'){
-                return scaleColorPolicy(d.cancelPolicy);
-            } else if($('input[name=optradio]:checked').val() == 'amenities'){
-                return scaleColorPolicy(d.amenities);
-            } else if($('input[name=optradio]:checked').val() == 'familyPets'){
-                return scaleColorPolicy(d.familyPets);
-            } else if($('input[name=optradio]:checked').val() == 'neighbourhood'){
-                return scaleColorPolicy(d.neighbourhood);
-            } 
+            switch (colorPalette) {
+                case colorPaletteOptions.roomType:
+                    return scaleColorPolicy(d.roomType); 
+                case colorPaletteOptions.cancelPolicy:
+                    return scaleColorPolicy(d.cancelPolicy); 
+                case colorPaletteOptions.amenities:
+                    return scaleColorPolicy(d.amenities); 
+                case colorPaletteOptions.familyPets:
+                    return scaleColorPolicy(d.familyPets); 
+                case colorPaletteOptions.neighbourhood:
+                    return scaleColorPolicy(d.neighbourhood); 
+            }
         })
         .style('opacity',0.7);
     //EXIT
@@ -709,29 +713,34 @@ function draw(){
 } 
 
 $('.roomTypeRadioBtn').click(function(){
+    colorPalette = colorPaletteOptions.roomType;
     colorBasedOnFilter();
     draw();
-})
+});
 
 $('.cancelPolicyRadioBtn').click(function(){
+    colorPalette = colorPaletteOptions.cancelPolicy;
     colorBasedOnFilter();
     draw();
-})
+});
 
 $('.amenitiesRadioBtn').click(function(){
+    colorPalette = colorPaletteOptions.amenities;
     colorBasedOnFilter();
     draw();
-})
+});
 
 $('.familyPetsRadioBtn').click(function(){
+    colorPalette = colorPaletteOptions.familyPets;
     colorBasedOnFilter();
     draw();
-})
+});
 
 $('.neighbourhoodRadioBtn').click(function(){
+    colorPalette = colorPaletteOptions.neighbourhood;
     colorBasedOnFilter();
     draw();
-})
+});
 
 
 function parse(d){
