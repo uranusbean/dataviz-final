@@ -9,7 +9,6 @@
     <!--<link href="../bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet"/>-->
     <link href="../global.css" rel="stylesheet"/>
     <link href="./style.css" rel="stylesheet"/>
-    <link href="./build.css" rel="stylesheet"/>
     <link rel="stylesheet" href="../font-awesome-4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
@@ -25,6 +24,7 @@
                 <button type="button" class="btn btn-default" id="chartBtn">Chart</button>
                 <button type="button" class="btn btn-default" id="mapBtn">Map</button>
             </div>
+            
             <section class="canvas" id="canvas">
                  <!--<div class="axisLabels">-->
                 <div class="btn-group xAxisOptions">
@@ -55,9 +55,8 @@
                 </div>
             <!--</div>-->
             </section>
-            
         </div>
-        <div class="btn-filter col-sm-4">
+        <div class="btn-filter col-sm-4 rightCol">
             <div class="filterSection"> 
                 <div class="filterHeader">
                     <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> 
@@ -127,7 +126,15 @@
     <div class="about">
         <div class="aboutTitle">About The Visualization</div>
         <div id="aboutVizContent">
-            
+            In this visualization, each circle represents a host based in Boston. 
+            The size of the circle represents the estimated monthly income of that particular host. 
+            The larger the circle, the higher the income will be. 
+            Both X axis and Y axis contain 5 options, including Minimum nights, 
+            Reviews per month, Cleaning fee, Price, Calculated Host Listings. 
+            Users are able to explore these 20 combinations in total. </br>
+            <p></p>
+            The filter section on the righthand side contains 5 dimensions, including
+            Room Type, Cancellation Policy, Amenities, Family Pets, and Neighbourhood.
         </div>
     </div>
     <div class="about">
@@ -135,6 +142,7 @@
         <div id="aboutDataContent">
             This visualization was created in <a href="https://d3js.org/">D3.js</a> by Yixuan (Janice) Zhang. 
             The data can be accessible via <a href="http://insideairbnb.com/get-the-data.html/">Inside Airbnb</a>.
+            The code for this visualization is available on <a href="https://github.com/uranusbean/dataviz-final">Github</a>. 
         </div>
     </div>
 </div>

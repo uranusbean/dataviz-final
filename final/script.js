@@ -73,10 +73,10 @@ var scaleYreviewsPerMonth = d3.scaleLinear()
     .range([h,0]);
     
 var scaleXprice = d3.scaleLinear()
-    .domain([0,1300])
+    .domain([0, 850])
     .range([0,w]);    
 var scaleYprice = d3.scaleLinear()
-    .domain([0,1300])
+    .domain([0,850])
     .range([h,0]);
     
 var scaleXcalculatedHostListing = d3.scaleLinear()
@@ -147,7 +147,7 @@ d3.queue()
 //legend 
 plot.append('text')
     .text('Estimated Monthly Income')
-    .attr('dx',0)
+    .attr('dx', 0)
     .attr('dy',h+70)
     
 plot.append('circle')
@@ -231,19 +231,19 @@ function addButtonGroup(btnGroupContainer,btnNameSet,onclick) {
         .enter()
         .append('a')
         .html(function(d){return d})
-        .attr('class','btn btn-default')
+        .attr('class','btn btn-default btnFilter')
         .style('color','white')
         .on('click',onclick);
 }
 
 function colorBasedOnFilter() {
-    d3.selectAll('.btn')
+    d3.selectAll('.btnFilter')
         .style('background',function(btnContent){
             if(isBtnSelected(btnContent)) {
                 if(isBtnGroupColorPelette(btnContent)){
                     return scaleColorPolicy(btnContent)
                 } else {
-                    return '#969696';
+                    return '#b5b5b5';
                 } 
             } else {
                 return 'white';
@@ -496,6 +496,8 @@ function canvasControl(){
         $('.yAxisOptions').hide();
         draw();
     });
+    $('#chartBtn').css('background','#d8d8d8');
+    $('#mapBtn').css('background','white');
 }
 
 canvasControl();
@@ -785,15 +787,15 @@ function parse(d){
     
     if(d.amenities.includes('Family/Kid Friendly')) {
         if (d.amenities.includes('Pets Allowed')){
-            entry.familyPets = 'Family/Kid Friendly + Pets Allowed';
+            entry.familyPets = 'Kid Friendly + Pets';
         } else {
-            entry.familyPets = 'Family/Kid Friendly';
+            entry.familyPets = 'Kid Friendly';
         }
     } else {
         if (d.amenities.includes('Pets Allowed')){
-            entry.familyPets = 'Pets Allowed';
+            entry.familyPets = 'Pets';
         } else {
-            entry.familyPets = 'None';
+            entry.familyPets = 'Neither';
         } 
     } 
     
