@@ -43,7 +43,7 @@ header {
 .radio {
     float: right;
     margin: 0;
-    /*padding-right: 20%;*/
+    padding-right: 20%;
 }
 
 .filterSection>.btn-group {
@@ -57,13 +57,13 @@ header {
     font-family: 'Roboto', sans-serif;
 }
 
-.btn-group-roomType>.btnFilter, .btn-group-cancelPolicy>.btnFilter{
-    width: 33.33%;
-}
+/*.btn-group-roomType>.btnFilter, .btn-group-cancelPolicy>.btnFilter{*/
+/*    width: 33.33%;*/
+/*}*/
 
-.btn-group-amenities>.btnFilter,.btn-group-familyPets>.btnFilter, .btn-group-neighbourhood>.btnFilter{
-    width: 25%;
-}
+/*.btn-group-amenities>.btnFilter,.btn-group-familyPets>.btnFilter, .btn-group-neighbourhood>.btnFilter{*/
+/*    width: 25%;*/
+/*}*/
 
 .btn-group p {
     font-weight: bold;

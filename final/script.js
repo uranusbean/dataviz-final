@@ -11,7 +11,8 @@ var plot = d3.select('.canvas')
     .attr('height', h + m.t + m.b +100)
     .append('g')
     .attr('transform','translate('+ m.l+','+ m.t+')');
- 
+
+// -------------------SET 3 LAYERS ----------------------     
 var axisLayer = plot.append('g');
 var mapLayer = plot.append('g');
 var dataLayer = plot.append('g');
@@ -45,81 +46,64 @@ var scaleColorRoom = d3.scaleOrdinal()
     .range(['#fd6b5a','#06ce98','#2175bc']),
     scaleColorPolicy = d3.scaleOrdinal()
     .range(['#03afeb','orange','#06ce98','#fd6b5a']);
-// var scaleX = d3.scaleLinear()
-//     .domain([0, 20])
-//     .range([0,w]);   
-// var scaleY = d3.scaleLinear()
-//     .domain([0,300])
-//     .range([h,0]);
+
+// -------------------SET SCALE X/Y AXIS----------------------    
 var scaleXminNights = d3.scaleLinear()
     .domain([0, 30])
     .range([0,w]);  
 var scaleYminNights = d3.scaleLinear()
     .domain([0, 30])
     .range([h,0]);  
-
 var scaleXcleaningFee = d3.scaleLinear()
     .domain([0,300])
     .range([0,w]);    
 var scaleYcleaningFee = d3.scaleLinear()
     .domain([0,300])
     .range([h,0]);
-    
 var scaleXreviewsPerMonth = d3.scaleLinear()
     .domain([0, 20])
     .range([0,w]);
 var scaleYreviewsPerMonth = d3.scaleLinear()
     .domain([0, 20])
     .range([h,0]);
-    
 var scaleXprice = d3.scaleLinear()
     .domain([0, 850])
     .range([0,w]);    
 var scaleYprice = d3.scaleLinear()
     .domain([0,850])
     .range([h,0]);
-    
 var scaleXcalculatedHostListing = d3.scaleLinear()
     .domain([0, 62])
     .range([0,w]);   
 var scaleYcalculatedHostListing = d3.scaleLinear()
     .domain([0, 62])
     .range([h,0]);
-
-// var axisX = d3.axisBottom()  
-//     .scale(scaleX)
-//     .tickSize(-h);
-// var axisY = d3.axisLeft()
-//     .scale(scaleY)
-//     .tickSize(-w);
+    
+// -------------------SET X/Y AXIS TICKSIZE----------------------    
 var axisXscaleXminNights = d3.axisBottom()  
     .scale(scaleXminNights)
     .tickSize(-h);
 var axisYscaleYminNights = d3.axisLeft()
     .scale(scaleYminNights)
     .tickSize(-w);
-    
 var axisXscaleXcleaningFee = d3.axisBottom()  
     .scale(scaleXcleaningFee)
     .tickSize(-h);
 var axisYscaleYcleaningFee = d3.axisLeft()
     .scale(scaleYcleaningFee)
     .tickSize(-w);
-
 var axisXscaleXreviewsPerMonth = d3.axisBottom()  
     .scale(scaleXreviewsPerMonth)
     .tickSize(-h);
 var axisYscaleYreviewsPerMonth = d3.axisLeft()
     .scale(scaleYreviewsPerMonth)
     .tickSize(-w);
-
 var axisXscaleXprice = d3.axisBottom()  
     .scale(scaleXprice)
     .tickSize(-h);
 var axisYscaleYprice = d3.axisLeft()
     .scale(scaleYprice)
     .tickSize(-w);
-
 var axisXscaleXcalculatedHostListing = d3.axisBottom()  
     .scale(scaleXcalculatedHostListing)
     .tickSize(-h);
@@ -129,7 +113,7 @@ var axisYscaleYcalculatedHostListing = d3.axisLeft()
  
 //Mapping - define projection, define path 
 var projection = d3.geoMercator()
-    .scale(200000)
+    .scale(180000)
     .rotate([71.068,0])
     .center([0,42.355])
     .translate([w/2,h/4])
@@ -152,7 +136,7 @@ d3.queue()
     .defer(d3.csv,'../data/airbnb.csv',parse)
     .await(dataloaded);
 
-//legend 
+// -------------------LEGEND---------------------    
 plot.append('text')
     .text('Estimated Monthly Income')
     .attr('dx', 0)
@@ -179,7 +163,7 @@ plot.append('circle')
     .style('stroke', '#484848')
     .style('fill','white');
 
-// Filter data that are not satisfying the standard
+// -------------------FILTER DATA THAT DO NOT MEET STANDARD---------------------  
 function preprocessData(data){
     dataSet = data;
     dataSet = dataSet.filter(function(entry){
@@ -188,6 +172,7 @@ function preprocessData(data){
         if(entry.calculatedHostListing == 0) return false;
         if(entry.minNights * entry.reviewsPerMonth > 30) return false;
         if(entry.cancelPolicy == 'super_strict_30') return false;
+        if(entry.neighbourhood == 'South Boston Waterfront' ||entry.neighbourhood == 'Leather District') return false;
         return true;
     });
     dataSet.forEach(function(d){
@@ -237,12 +222,14 @@ function addButtonGroup(btnGroupContainer,btnNameSet,onclick) {
         .selectAll('.btn')
         .data(btnNameSet.values())
         .enter()
-        .append('a')
+        .append('div')
         .html(function(d){return d})
         .attr('class','btn btn-default btnFilter')
         .style('color','white')
         .on('click',onclick);
 }
+
+$('.btn-group-neighbourhood').children().last().css('background','red');;
 
 function colorBasedOnFilter() {
     d3.selectAll('.btnFilter')
@@ -280,7 +267,6 @@ function isBtnGroupColorPelette(btn){
     if($('input[name=optradio]:checked').val() == groupName) return true;
     return false;
 }
-
 
 function roomTypeBtnClickHandler(roomType){
     if (filterStatus.roomTypes.selected.has(roomType)){
@@ -511,7 +497,7 @@ function draw(){
         maxX = d3.max(dataSet, function(d){return d.monthlyIncome;}); 
     var scaleIncome = d3.scaleLinear()
         .domain([minX, maxX])
-        .range([1,15]);
+        .range([2,15]);
     
     var filteredDataSet = dataSet.filter(function(entry){
         if(!filterStatus.roomTypes.selected.has(entry.roomType)) return false;
@@ -702,7 +688,7 @@ function draw(){
                     return scaleColorPolicy(d.neighbourhood); 
             }
         })
-        .style('opacity',0.7);
+        .style('opacity',0.6);
     //EXIT
     node.exit()
         .transition()
@@ -796,13 +782,13 @@ function parse(d){
     
     if(d.amenities.includes('Family/Kid Friendly')) {
         if (d.amenities.includes('Pets Allowed')){
-            entry.familyPets = 'Kids + Pets';
+            entry.familyPets = 'Kids Friendly + Pets Allowed';
         } else {
-            entry.familyPets = 'Kids';
+            entry.familyPets = 'Kids Friendly';
         }
     } else {
         if (d.amenities.includes('Pets Allowed')){
-            entry.familyPets = 'Pets';
+            entry.familyPets = 'Pets Allowed';
         } else {
             entry.familyPets = 'Neither';
         } 
@@ -814,6 +800,6 @@ function parse(d){
     if(!filterStatus.familyPets.btns.has(entry.familyPets) ){
         filterStatus.familyPets.btns.add(entry.familyPets);
     } 
-    
+        
     return entry;
 }
