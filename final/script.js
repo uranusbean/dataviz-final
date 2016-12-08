@@ -142,18 +142,20 @@ plot.append('text')
     .attr('dx', 0)
     .attr('dy',h+70)
     
-plot.append('circle')
+var legendCircle = plot.append('circle')
     .attr('r',15)
     .attr('cx',200)
     .attr('cy', h+70)
     .style('stroke', '#484848')
-    .style('fill','white');
+    .style('stroke-width','3px')
+    .style('fill','white')
 
 plot.append('circle')
     .attr('r',10)
     .attr('cx',240)
     .attr('cy', h+70)
     .style('stroke', '#484848')
+    .style('stroke-width','2px')
     .style('fill','white');
 
 plot.append('circle')
@@ -228,8 +230,6 @@ function addButtonGroup(btnGroupContainer,btnNameSet,onclick) {
         .style('color','white')
         .on('click',onclick);
 }
-
-$('.btn-group-neighbourhood').children().last().css('background','red');;
 
 function colorBasedOnFilter() {
     d3.selectAll('.btnFilter')
@@ -560,8 +560,8 @@ function drawGroupRectangle(filteredDataSet) {
     var plotboxsEnter = plotboxs.enter()
         .append('rect')
         .style('fill', 'none')
-        .attr("stroke-width", 1)
-        .attr('stroke','red')
+        .attr("stroke-width", 2)
+        .attr('stroke','#ff5a5f')
         .attr('x', 0)
         .attr('y', 0)
         .attr('width', 0)
@@ -572,6 +572,7 @@ function drawGroupRectangle(filteredDataSet) {
         // .select('rect')
         .transition()
         .duration(1000)
+        
         .attr("x", function(box) {
             return box.minXTopBox;
         })
@@ -588,7 +589,6 @@ function drawGroupRectangle(filteredDataSet) {
     plotboxs.exit().remove();
 }
         
-
 function draw(){
     var minX = d3.min(dataSet, function(d){return d.monthlyIncome;}),
         maxX = d3.max(dataSet, function(d){return d.monthlyIncome;}); 
@@ -632,13 +632,10 @@ function draw(){
                 .html("<b>Minimum Nights:</b><span style='color:#929292' class='tooltipValue'>"+d.minNights+ "</span>");
             tooltip.select('.value4')
                 .html("<b>Monthly Income:</b><span style='color:#929292' class='tooltipValue'>"+'$'+d.monthlyIncome+ "</span>");
-                // .html('Monthly Income: $'+d.monthlyIncome);
             tooltip.select('.value5')
                 .html("<b>Neighbourhood:</b><span style='color:#929292' class='tooltipValue'>"+d.neighbourhood+ "</span>");
-                // .html('Neighbourhood: '+d.neighbourhood);
             tooltip.select('.value6')
                 .html("<b>Cancel Policy: </b><span style='color:#929292' class='tooltipValue'>"+d.cancelPolicy+ "</span>");
-                // .html('Cancel Policy: '+d.cancelPolicy);
             tooltip.transition()
                 .style('opacity',1)
                 .style('visibility','visible');
@@ -799,18 +796,7 @@ $('.neighbourhoodRadioBtn').click(function(){
     draw();
 });
 
-
-
 function parse(d){
-    // if( !filterStatus.roomTypes.btns.has(d.room_type) ){
-    //     filterStatus.roomTypes.btns.add(d.room_type);
-    // } 
-    // if( !filterStatus.neighbourLocations.btns.has(d.neighbourhood) ){
-    //     filterStatus.neighbourLocations.btns.add(d.neighbourhood);
-    // } 
-    // if( !filterStatus.cancelTypes.btns.has(d.cancellation_policy) ){
-    //     filterStatus.cancelTypes.btns.add(d.cancellation_policy);
-    // } 
     var entry = {
         id:d.id,
         hostId: +d.host_id,
