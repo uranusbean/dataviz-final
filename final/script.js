@@ -492,13 +492,110 @@ function canvasControl(){
 
 canvasControl();
 
+function drawGroupRectangle(filteredDataSet) {
+    var tier1BarPercentile = 0.90;
+    var tier2BarPercentile = 0.60;
+    var sortedIncome = filteredDataSet.sort(function(a,b){
+        return a.monthlyIncome - b.monthlyIncome; // low to high
+    });
+   
+    var tier1BarIncome = sortedIncome[
+        Math.round(sortedIncome.length*tier1BarPercentile)].monthlyIncome;
+    var tier2BarIncome = sortedIncome[
+        Math.round(sortedIncome.length*tier2BarPercentile)].monthlyIncome;
+    
+    var filteredTop = sortedIncome.filter(function(entry){
+        entry.x = getCircleX(entry);
+        entry.y = getCircleY(entry);
+        if (entry.monthlyIncome >= tier1BarIncome){
+            entry.tier = 1;
+            return entry.monthlyIncome;
+        }
+    });
+    
+    var fiteredMiddle = sortedIncome.filter(function(entry){
+        if(entry.monthlyIncome < tier1BarIncome && 
+            entry.monthlyIncome >= tier2BarIncome){
+            entry.tier = 2;
+            return true;
+        }
+        return false;
+    });
+    
+    var filteredBottom = sortedIncome.filter(function(entry){
+        if (entry.monthlyIncome < tier2BarIncome) {
+            entry.tier = 3;
+            return entry.monthlyIncome;
+        }
+    });
+    
+    // console.log(filteredTop);
+    // console.log(fiteredMiddle);
+    // console.log(filteredBottom);
+    
+//----------SORT X/Y AXIS POSITION--------
+    filteredTop.sort(function(a,b){
+      if (a.x > b.x) return 1;
+      if (a.x < b.x) return -1;
+      return 0;
+    });
+   
+    var boxs = [{}]; 
+    boxs[0].minXTopBox = filteredTop[Math.round(filteredTop.length * 0.10)].x;
+    boxs[0].maxXTopBox = filteredTop[Math.round(filteredTop.length * 0.90)].x;
+    
+    filteredTop.sort(function(a,b){
+        if (a.y > b.y) return 1;
+        if (a.y < b.y) return -1;
+        return 0;
+    });
+    
+    boxs[0].minYTopBox = filteredTop[Math.round(filteredTop.length * 0.10)].y;
+    boxs[0].maxYTopBox = filteredTop[Math.round(filteredTop.length * 0.90)].y;
+    boxs[0].tier = 1;
+    
+    var plotboxs = plot.selectAll('rect')
+        .data(boxs, function(box){return box.tier});
+    
+    var plotboxsEnter = plotboxs.enter()
+        .append('rect')
+        .style('fill', 'none')
+        .attr("stroke-width", 1)
+        .attr('stroke','red')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('width', 0)
+        .attr('height', 0);
+        
+    plotboxsEnter
+        .merge(plotboxs)
+        // .select('rect')
+        .transition()
+        .duration(1000)
+        .attr("x", function(box) {
+            return box.minXTopBox;
+        })
+        .attr("y", function(box) {
+            return box.minYTopBox;
+        })
+        .attr("width", function(box) {
+            return box.maxXTopBox - box.minXTopBox;
+        })
+        .attr("height", function(box) {
+            return box.maxYTopBox- box.minYTopBox;
+        });
+        
+    plotboxs.exit().remove();
+}
+        
+
 function draw(){
     var minX = d3.min(dataSet, function(d){return d.monthlyIncome;}),
         maxX = d3.max(dataSet, function(d){return d.monthlyIncome;}); 
     var scaleIncome = d3.scaleLinear()
         .domain([minX, maxX])
         .range([2,15]);
-    
+        
     var filteredDataSet = dataSet.filter(function(entry){
         if(!filterStatus.roomTypes.selected.has(entry.roomType)) return false;
         if(!filterStatus.neighbourLocations.selected.has(entry.neighbourhood)) return false;
@@ -507,6 +604,8 @@ function draw(){
         if(!filterStatus.familyPets.selected.has(entry.familyPets)) return false;
         return true;
     });
+
+    drawGroupRectangle(filteredDataSet);
     
     var node = dataLayer.selectAll('.node')
         .data(filteredDataSet,function(d){return d.id});
@@ -562,12 +661,17 @@ function draw(){
         .attr('r', function(d){
             return scaleIncome(d.monthlyIncome);
         })
-        .style('fill','#8c8c8c');
-    
-    //UPDATE+ ENTER
-    // var nodeTransition = nodeEnter
-    //     .merge(node);  --nodes appear everytime clicking on the btn
-
+        .style('fill','#8c8c8c')
+        .style('stroke-width', function(entry) {
+            if (entry.tier == 1) {
+                return '3px';
+            } else if (entry.tier == 2) {
+                return '1px';
+            }
+            return '0px';
+        })
+        .style('stroke', 'black');
+  
     nodeEnter.select('circle')
         // .attr('cx',0)
         // .attr('cy',h/2)
@@ -596,84 +700,13 @@ function draw(){
                 return h/2;
             }
         });
-        // .attr('cx',function(d){
-        //     if (controlBtnId == 1){
-        //         if($('#xDropdown').text() == 'Minimum Nights'){
-        //             return scaleXminNights(d.minNights);
-        //         }else if($('#xDropdown').text() == 'Reviews Per Month'){
-        //             return scaleXreviewsPerMonth(d.reviewsPerMonth);
-        //         }else if($('#xDropdown').text() == 'Cleaning Fee'){
-        //             return scaleXcleaningFee(d.cleaningFee);
-        //         }else if($('#xDropdown').text() == 'Price'){
-        //             return scaleXprice(d.price);
-        //         }else if($('#xDropdown').text() == 'Calculated Host Listings'){
-        //             return scaleXcalculatedHostListing(d.calculatedHostListing);
-        //         }; 
-                
-        //     }else if(controlBtnId ==2) {
-        //         return projection([d.lon,d.lat])[0];
-        //     }
-        // });
-        // .attr('cy',function(d){
-        //     if (controlBtnId == 1){
-        //         if($('#yDropdown').text() == 'Minimum Nights'){
-        //             return scaleYminNights(d.minNights);
-        //         }else if($('#yDropdown').text() == 'Reviews Per Month'){
-        //             return scaleYreviewsPerMonth(d.reviewsPerMonth);
-        //         }else if($('#yDropdown').text() == 'Cleaning Fee'){
-        //             return scaleYcleaningFee(d.cleaningFee);
-        //         }else if($('#yDropdown').text() == 'Price'){
-        //             return scaleYprice(d.price);
-        //         }else if($('#yDropdown').text() == 'Calculated Host Listings'){
-        //             return scaleYcalculatedHostListing(d.calculatedHostListing);
-        //         };
-                
-        //     }else if(controlBtnId ==2) {
-        //         return projection([d.lon,d.lat])[1];
-        //     }
-        // });
-    
+   
     nodeEnter.merge(node)
         .select('circle')
         .transition()
         .duration(500)
-        .attr('cx',function(d){
-            if (controlBtnId == 1){
-                if($('#xDropdown').text() == 'Minimum Nights'){
-                    // console.log($('#xDropdown').val());
-                    return scaleXminNights(d.minNights);
-                }else if($('#xDropdown').text() == 'Reviews Per Month'){
-                    return scaleXreviewsPerMonth(d.reviewsPerMonth);
-                }else if($('#xDropdown').text() == 'Cleaning Fee'){
-                    return scaleXcleaningFee(d.cleaningFee);
-                }else if($('#xDropdown').text() == 'Price'){
-                    return scaleXprice(d.price);
-                }else if($('#xDropdown').text() == 'Calculated Host Listings'){
-                    return scaleXcalculatedHostListing(d.calculatedHostListing);
-                };
-                // return scaleX(d.secDeposit);
-            }else if(controlBtnId ==2) {
-                return projection([d.lon,d.lat])[0];
-            }
-        })
-        .attr('cy',function(d){
-            if (controlBtnId == 1){
-                    if($('#yDropdown').text() == 'Minimum Nights'){
-                        return scaleYminNights(d.minNights);
-                    }else if($('#yDropdown').text() == 'Reviews Per Month'){
-                        return scaleYreviewsPerMonth(d.reviewsPerMonth);
-                    }else if($('#yDropdown').text() == 'Cleaning Fee'){
-                        return scaleYcleaningFee(d.cleaningFee);
-                    }else if($('#yDropdown').text() == 'Price'){
-                        return scaleYprice(d.price);
-                    }else if($('#yDropdown').text() == 'Calculated Host Listings'){
-                        return scaleYcalculatedHostListing(d.calculatedHostListing);
-                    };
-                // return scaleY(d.price);
-            }else if(controlBtnId ==2) {
-                return projection([d.lon,d.lat])[1];    
-            };
-        })
+        .attr('cx',getCircleX)
+        .attr('cy',getCircleY)
         .style("fill", function(d) { 
             switch (colorPalette) {
                 case colorPaletteOptions.roomType:
@@ -698,6 +731,44 @@ function draw(){
         .remove();
 } 
 
+function getCircleX(entry){
+    if (controlBtnId == 1){
+        if($('#xDropdown').text() == 'Minimum Nights'){
+            // console.log($('#xDropdown').val());
+            return scaleXminNights(entry.minNights);
+        }else if($('#xDropdown').text() == 'Reviews Per Month'){
+            return scaleXreviewsPerMonth(entry.reviewsPerMonth);
+        }else if($('#xDropdown').text() == 'Cleaning Fee'){
+            return scaleXcleaningFee(entry.cleaningFee);
+        }else if($('#xDropdown').text() == 'Price'){
+            return scaleXprice(entry.price);
+        }else if($('#xDropdown').text() == 'Calculated Host Listings'){
+            return scaleXcalculatedHostListing(entry.calculatedHostListing);
+        };
+        // return scaleX(d.secDeposit);
+    }else if(controlBtnId ==2) {
+        return projection([entry.lon,entry.lat])[0];
+    }
+};
+
+function getCircleY(entry){
+    if (controlBtnId == 1){
+        if($('#yDropdown').text() == 'Minimum Nights'){
+            return scaleYminNights(entry.minNights);
+        }else if($('#yDropdown').text() == 'Reviews Per Month'){
+            return scaleYreviewsPerMonth(entry.reviewsPerMonth);    
+        }else if($('#yDropdown').text() == 'Cleaning Fee'){ 
+            return scaleYcleaningFee(entry.cleaningFee);
+        }else if($('#yDropdown').text() == 'Price'){
+            return scaleYprice(entry.price);
+        }else if($('#yDropdown').text() == 'Calculated Host Listings'){
+            return scaleYcalculatedHostListing(entry.calculatedHostListing);
+        };
+    }else if(controlBtnId ==2) {
+        return projection([entry.lon,entry.lat])[1];    
+    };
+}      
+        
 $('.roomTypeRadioBtn').click(function(){
     colorPalette = colorPaletteOptions.roomType;
     colorBasedOnFilter();
@@ -727,6 +798,7 @@ $('.neighbourhoodRadioBtn').click(function(){
     colorBasedOnFilter();
     draw();
 });
+
 
 
 function parse(d){
@@ -763,7 +835,7 @@ function parse(d){
         acceptRate: d.host_acceptance_rate,
         cancelPolicy: d.cancellation_policy,
         // amenities: d.amenities,
-        monthlyIncome: Math.round(d.price * d.reviews_per_month *d.minimum_nights)
+        monthlyIncome: d.price * d.reviews_per_month *d.minimum_nights + d.cleaning_fee * d.reviews_per_month
     };
     
     if(d.amenities.includes('TV')) {
@@ -776,7 +848,7 @@ function parse(d){
         if (d.amenities.includes('Wireless')){
             entry.amenities = ' Wifi';
         } else {
-            entry.amenities = 'Neither';
+            entry.amenities = 'None';
         } 
     } 
     
