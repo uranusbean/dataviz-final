@@ -24,7 +24,6 @@
                 <button type="button" class="btn btn-default" id="chartBtn">Chart</button>
                 <button type="button" class="btn btn-default" id="mapBtn">Map</button>
             </div>
-            
             <section class="canvas" id="canvas">
                  <!--<div class="axisLabels">-->
                 <div class="btn-group xAxisOptions">
@@ -55,7 +54,25 @@
                 </div>
             <!--</div>-->
             </section>
+             <div class = "legendExplain">
+                <div class="circleLegend">
+                    <span> Estimated monthly income of the host
+                        <i class="fa fa-question-circle" aria-hidden="true"></i>
+                    </span>
+                    <span><i class="fa fa-circle-thin fa-3x" aria-hidden="true"></i> Top 10%</span>
+                    <span><i class="fa fa-circle-thin fa-2x" aria-hidden="true"></i> Top 10% to 50%</span>
+                    <span><i class="fa fa-circle-thin fa-x" aria-hidden="true"></i> Lower than 50%</span>
+                </div>
+                <div class="rectLegend">
+                    <span>Concentrated high-income hosts area
+                        <i class="fa fa-question-circle" aria-hidden="true"></i>
+                    </span>
+                    <!--<div id="drawRectLegend"></div>-->
+                    <span><i class="fa fa-square-o fa-3x" aria-hidden="true"></i></span>
+                </div>
+            </div>
         </div>
+        
         <div class="btn-filter col-sm-4 rightCol">
             <div class="filterSection"> 
                 <div class="filterHeader">
@@ -137,6 +154,7 @@
             to esimate the monthly income for each listing. Some hosts may have 
             more than 1 listing, and this is how 'Calculated Host Listings' comes.
             <p></p>
+            
             The filter section on the righthand side contains 5 dimensions, including
             <b>Room Type, Cancellation Policy, Amenities, Family Pets, and Neighbourhood</b>.
             Each dimension includes a few filters. Each filter can be seen as a 

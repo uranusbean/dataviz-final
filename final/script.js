@@ -8,7 +8,7 @@ var m = {t:50,r:50,b:50,l:50},
 var plot = d3.select('.canvas')
     .append('svg')
     .attr('width', w + m.l + m.r)
-    .attr('height', h + m.t + m.b +100)
+    .attr('height', h + m.t + m.b)
     .append('g')
     .attr('transform','translate('+ m.l+','+ m.t+')');
 
@@ -136,35 +136,6 @@ d3.queue()
     .defer(d3.csv,'../data/airbnb.csv',parse)
     .await(dataloaded);
 
-// -------------------LEGEND---------------------    
-plot.append('text')
-    .text('Estimated Monthly Income')
-    .attr('dx', 0)
-    .attr('dy',h+70)
-    
-var legendCircle = plot.append('circle')
-    .attr('r',15)
-    .attr('cx',200)
-    .attr('cy', h+70)
-    .style('stroke', '#484848')
-    .style('stroke-width','3px')
-    .style('fill','white')
-
-plot.append('circle')
-    .attr('r',10)
-    .attr('cx',240)
-    .attr('cy', h+70)
-    .style('stroke', '#484848')
-    .style('stroke-width','2px')
-    .style('fill','white');
-
-plot.append('circle')
-    .attr('r',6)
-    .attr('cx',270)
-    .attr('cy', h+70)
-    .style('stroke', '#484848')
-    .style('fill','white');
-
 // -------------------FILTER DATA THAT DO NOT MEET STANDARD---------------------  
 function preprocessData(data){
     dataSet = data;
@@ -174,7 +145,7 @@ function preprocessData(data){
         if(entry.calculatedHostListing == 0) return false;
         if(entry.minNights * entry.reviewsPerMonth > 30) return false;
         if(entry.cancelPolicy == 'super_strict_30') return false;
-        if(entry.neighbourhood == 'South Boston Waterfront' ||entry.neighbourhood == 'Leather District') return false;
+        // if(entry.neighbourhood == 'South Boston Waterfront' ||entry.neighbourhood == 'Leather District') return false;
         return true;
     });
     dataSet.forEach(function(d){
@@ -494,7 +465,7 @@ canvasControl();
 
 function drawGroupRectangle(filteredDataSet) {
     var tier1BarPercentile = 0.90;
-    var tier2BarPercentile = 0.60;
+    var tier2BarPercentile = 0.50;
     var sortedIncome = filteredDataSet.sort(function(a,b){
         return a.monthlyIncome - b.monthlyIncome; // low to high
     });
@@ -560,8 +531,8 @@ function drawGroupRectangle(filteredDataSet) {
     var plotboxsEnter = plotboxs.enter()
         .append('rect')
         .style('fill', 'none')
-        .attr("stroke-width", 2)
-        .attr('stroke','#ff5a5f')
+        .attr("stroke-width", 1)
+        .attr('stroke','#8a8a8a')
         .attr('x', 0)
         .attr('y', 0)
         .attr('width', 0)
@@ -631,7 +602,7 @@ function draw(){
             tooltip.select('.value3')
                 .html("<b>Minimum Nights:</b><span style='color:#929292' class='tooltipValue'>"+d.minNights+ "</span>");
             tooltip.select('.value4')
-                .html("<b>Monthly Income:</b><span style='color:#929292' class='tooltipValue'>"+'$'+d.monthlyIncome+ "</span>");
+                .html("<b>Monthly Income:</b><span style='color:#929292' class='tooltipValue'>"+'$'+ Math.round(d.monthlyIncome)+ "</span>");
             tooltip.select('.value5')
                 .html("<b>Neighbourhood:</b><span style='color:#929292' class='tooltipValue'>"+d.neighbourhood+ "</span>");
             tooltip.select('.value6')
