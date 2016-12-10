@@ -57,18 +57,31 @@
              <div class = "legendExplain">
                 <div class="circleLegend">
                     <span> Estimated monthly income of the host
-                        <i class="fa fa-question-circle" aria-hidden="true"></i>
+                        <a class="incomeTooltip" title="We can estimate Airbnb host monthly income based on the price per night, cleaning fee, minimum nights, and reviews per month.">
+                            <i class="fa fa-question-circle" aria-hidden="true"></i>
+                        </a>
                     </span>
                     <span><i class="fa fa-circle-thin fa-3x" aria-hidden="true"></i> Top 10%</span>
                     <span><i class="fa fa-circle-thin fa-2x" aria-hidden="true"></i> Top 10% to 50%</span>
                     <span><i class="fa fa-circle-thin fa-x" aria-hidden="true"></i> Lower than 50%</span>
                 </div>
                 <div class="rectLegend">
-                    <span>Concentrated high-income hosts area
-                        <i class="fa fa-question-circle" aria-hidden="true"></i>
-                    </span>
-                    <!--<div id="drawRectLegend"></div>-->
-                    <span><i class="fa fa-square-o fa-3x" aria-hidden="true"></i></span>
+                    <div class="rectLegendTitle">Clustered host area based on income
+                        <a class="clusterRectTooltip" title="Based on the Airbnb host monthly income, we divide all the hosts into 3 tiers: top 10% host group, top 10% to 50% host group, and lower than 50% host group. ">
+                            <i class="fa fa-question-circle" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <!--<span><i class="fa fa-square-o fa-3x" aria-hidden="true"> High-income</i></span>-->
+                    <div class="rectLegendContent"> 
+                        <div class="rectLegendIcon" id="rectLegendIcon1"></div> 
+                        <div class="rectLegendTitle"> High-income</div>
+                    </div>
+                    <div class="rectLegendContent"> 
+                        <div class="rectLegendIcon" id="rectLegendIcon2"></div> <div class="rectLegendTitle"> Middle-income</div>
+                    </div>
+                    <div class="rectLegendContent"> 
+                        <div class="rectLegendIcon" id="rectLegendIcon3"></div> <div class="rectLegendTitle"> Low-income</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -146,15 +159,15 @@
             In this visualization, each circle represents a host based in Boston. 
             The size of the circle represents the estimated monthly income of that particular host. 
             The larger the circle, the higher the income will be. 
+            <p style="padding:0 15%"><i>Expected monthly income of Airbnb host = Price/ night * Reviews/ month * Minimum nights + Cleaning fee * Reviews/ month</i></p>
             Both X axis and Y axis contain 5 options, including <b>Minimum nights, 
             Reviews Per Month, Cleaning Fee, Price, Calculated Host Listings</b>. 
             Users are able to explore the relationship among these 20 combinations.
-            Inspired by Inside Airbnb, A Airbnb guest may leave a review after stay.
+            Inspired by Inside Airbnb, an Airbnb guest may leave a review after stay.
             The minimum night, price and number of reviews per month can be used 
             to esimate the monthly income for each listing. Some hosts may have 
-            more than 1 listing, and this is how 'Calculated Host Listings' comes.
+            more than one listing, and this is how 'Calculated Host Listings' comes.
             <p></p>
-            
             The filter section on the righthand side contains 5 dimensions, including
             <b>Room Type, Cancellation Policy, Amenities, Family Pets, and Neighbourhood</b>.
             Each dimension includes a few filters. Each filter can be seen as a 

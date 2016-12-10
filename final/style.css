@@ -146,25 +146,78 @@ header {
     margin-left: 6%;
 }
 
-.legendExplain span i {
+.circleLegend span i {
    vertical-align: middle;
 }
 
-.legendExplain span:nth-child(1),.legendExplain span:nth-child(2) {
-    padding-right: 20px;
+.circleLegend span:nth-child(1){
+    padding-right: 2%;
 }
 
-.legendExplain span:nth-child(3){
-    padding-right: 25px;
+.legendExplain span:nth-child(2) {
+    padding-right: 5%;
 }
 
-/*.rectLegend span:nth-child(2){*/
-/*    color: #ff5a5f;*/
-/*}*/
+.circleLegend span:nth-child(3){
+    padding-right: 3%;
+}
 
 #drawRectLegend {
     width: 150px;
     height: 20px;
     background: white;
     border: 1px solid black;
+}
+
+.legendHover {
+    display: none;
+    width: 300px;
+    height: 200px;
+    border: 1px solid #8e8e8e;
+}
+
+a {
+    color: black !important;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+/*------LEGEND STYLE------*/
+.rectLegendTitle {
+    display: inline-block;
+}
+
+.rectLegendIcon{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#rectLegendIcon1 {
+    width: 23px;
+    height: 23px;
+    /*outline-style: solid;*/
+    border: 3px solid black;
+}
+
+#rectLegendIcon2 {
+    width: 22px;
+    height: 22px;
+    border: 2px solid black;
+}
+
+#rectLegendIcon3 {
+    width: 21px;
+    height: 21px;
+    border: 1px solid black;
+}
+
+.rectLegendContent {
+    margin-left: 3%;  
+    display: inline-block;
+}
+
+.rectLegendTitle{
+    display: inline-block;
 }
