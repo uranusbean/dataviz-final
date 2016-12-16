@@ -464,104 +464,109 @@ function canvasControl(){
 canvasControl();
 
 function drawGroupRectangle(filteredDataSet) {
-    var tier1BarPercentile = 0.90;
-    var tier2BarPercentile = 0.50;
-    var sortedIncome = filteredDataSet.sort(function(a,b){
-        return a.monthlyIncome - b.monthlyIncome; // low to high
-    });
-   
-    var tier1BarIncome = sortedIncome[
-        Math.floor(sortedIncome.length*tier1BarPercentile)].monthlyIncome;
-    var tier2BarIncome = sortedIncome[
-        Math.floor(sortedIncome.length*tier2BarPercentile)].monthlyIncome;
-    
-    var filteredTop = sortedIncome.filter(function(entry){
-        entry.x = getCircleX(entry);
-        entry.y = getCircleY(entry);
-        if (entry.monthlyIncome >= tier1BarIncome){
-            entry.tier = 1;
-            return entry.monthlyIncome;
-        }
-    });
-    
-    var filteredMiddle = sortedIncome.filter(function(entry){
-        if(entry.monthlyIncome < tier1BarIncome && 
-            entry.monthlyIncome >= tier2BarIncome){
-            entry.tier = 2;
-            return true;
-        }
-        return false;
-    });
-    
-    var filteredBottom = sortedIncome.filter(function(entry){
-        if (entry.monthlyIncome < tier2BarIncome) {
-            entry.tier = 3;
-            return entry.monthlyIncome;
-        }
-    });
-    
-    // console.log(filteredTop);
-    // console.log(fiteredMiddle);
-    // console.log(filteredBottom);
-    
-//----------SORT X/Y AXIS POSITION--------
-    filteredTop.sort(function(a,b){
-      if (a.x > b.x) return 1;
-      if (a.x < b.x) return -1;
-      return 0;
-    });
-    
-    filteredMiddle.sort(function(a,b){
-      if (a.x > b.x) return 1;
-      if (a.x < b.x) return -1;
-      return 0;
-    });
-    
-    filteredBottom.sort(function(a,b){
-      if (a.x > b.x) return 1;
-      if (a.x < b.x) return -1;
-      return 0;
-    });
-   
-    var boxs = [{},{},{}]; 
-    boxs[0].minXTopBox = filteredTop[Math.floor(filteredTop.length * 0.10)].x;
-    boxs[0].maxXTopBox = filteredTop[Math.floor(filteredTop.length * 0.90)].x;
-    
-    boxs[1].minXTopBox = filteredMiddle[Math.floor(filteredMiddle.length * 0.10)].x;
-    boxs[1].maxXTopBox = filteredMiddle[Math.floor(filteredMiddle.length * 0.90)].x;
-    
-    boxs[2].minXTopBox = filteredBottom[Math.floor(filteredBottom.length * 0.10)].x;
-    boxs[2].maxXTopBox = filteredBottom[Math.floor(filteredBottom.length * 0.90)].x;
-    
-    filteredTop.sort(function(a,b){
-        if (a.y > b.y) return 1;
-        if (a.y < b.y) return -1;
-        return 0;
-    });
-    
-     filteredMiddle.sort(function(a,b){
-        if (a.y > b.y) return 1;
-        if (a.y < b.y) return -1;
-        return 0;
-    });
-    
-     filteredBottom.sort(function(a,b){
-        if (a.y > b.y) return 1;
-        if (a.y < b.y) return -1;
-        return 0;
-    });
-    
-    boxs[0].minYTopBox = filteredTop[Math.floor(filteredTop.length * 0.10)].y;
-    boxs[0].maxYTopBox = filteredTop[Math.floor(filteredTop.length * 0.90)].y;
-    boxs[0].tier = 1;
-    
-    boxs[1].minYTopBox = filteredMiddle[Math.floor(filteredMiddle.length * 0.10)].y;
-    boxs[1].maxYTopBox = filteredMiddle[Math.floor(filteredMiddle.length * 0.90)].y;
-    boxs[1].tier = 2;
-    
-    boxs[2].minYTopBox = filteredBottom[Math.floor(filteredBottom.length * 0.10)].y;
-    boxs[2].maxYTopBox = filteredBottom[Math.floor(filteredBottom.length * 0.90)].y;
-    boxs[2].tier = 3;
+    let boxs = [];
+    if (filteredDataSet.length !== 0) {
+        var tier1BarPercentile = 0.90;
+        var tier2BarPercentile = 0.50;
+        var sortedIncome = filteredDataSet.sort(function(a,b){
+            return a.monthlyIncome - b.monthlyIncome; // low to high
+        });
+       
+        var tier1BarIncome = sortedIncome[
+            Math.floor(sortedIncome.length*tier1BarPercentile)].monthlyIncome;
+        var tier2BarIncome = sortedIncome[
+            Math.floor(sortedIncome.length*tier2BarPercentile)].monthlyIncome;
+        
+        var filteredTop = sortedIncome.filter(function(entry){
+            entry.x = getCircleX(entry);
+            entry.y = getCircleY(entry);
+            if (entry.monthlyIncome >= tier1BarIncome){
+                entry.tier = 1;
+                return entry.monthlyIncome;
+            }
+        });
+        
+        var filteredMiddle = sortedIncome.filter(function(entry){
+            if(entry.monthlyIncome < tier1BarIncome && 
+                entry.monthlyIncome >= tier2BarIncome){
+                entry.tier = 2;
+                return true;
+            }
+            return false;
+        });
+        
+        var filteredBottom = sortedIncome.filter(function(entry){
+            if (entry.monthlyIncome < tier2BarIncome) {
+                entry.tier = 3;
+                return entry.monthlyIncome;
+            }
+        });
+        
+        // console.log(filteredTop);
+        // console.log(fiteredMiddle);
+        // console.log(filteredBottom);
+        
+    //----------SORT X/Y AXIS POSITION--------
+        filteredTop.sort(function(a,b){
+          if (a.x > b.x) return 1;
+          if (a.x < b.x) return -1;
+          return 0;
+        });
+        
+        filteredMiddle.sort(function(a,b){
+          if (a.x > b.x) return 1;
+          if (a.x < b.x) return -1;
+          return 0;
+        });
+        
+        filteredBottom.sort(function(a,b){
+          if (a.x > b.x) return 1;
+          if (a.x < b.x) return -1;
+          return 0;
+        });
+       
+        boxs.push({});
+        boxs[0].minXTopBox = filteredTop[Math.floor(filteredTop.length * 0.10)].x;
+        boxs[0].maxXTopBox = filteredTop[Math.floor(filteredTop.length * 0.90)].x;
+        
+        boxs.push({});
+        boxs[1].minXTopBox = filteredMiddle[Math.floor(filteredMiddle.length * 0.10)].x;
+        boxs[1].maxXTopBox = filteredMiddle[Math.floor(filteredMiddle.length * 0.90)].x;
+        
+        boxs.push({});
+        boxs[2].minXTopBox = filteredBottom[Math.floor(filteredBottom.length * 0.10)].x;
+        boxs[2].maxXTopBox = filteredBottom[Math.floor(filteredBottom.length * 0.90)].x;
+        
+        filteredTop.sort(function(a,b){
+            if (a.y > b.y) return 1;
+            if (a.y < b.y) return -1;
+            return 0;
+        });
+        
+         filteredMiddle.sort(function(a,b){
+            if (a.y > b.y) return 1;
+            if (a.y < b.y) return -1;
+            return 0;
+        });
+        
+         filteredBottom.sort(function(a,b){
+            if (a.y > b.y) return 1;
+            if (a.y < b.y) return -1;
+            return 0;
+        });
+        
+        boxs[0].minYTopBox = filteredTop[Math.floor(filteredTop.length * 0.10)].y;
+        boxs[0].maxYTopBox = filteredTop[Math.floor(filteredTop.length * 0.90)].y;
+        boxs[0].tier = 1;
+        
+        boxs[1].minYTopBox = filteredMiddle[Math.floor(filteredMiddle.length * 0.10)].y;
+        boxs[1].maxYTopBox = filteredMiddle[Math.floor(filteredMiddle.length * 0.90)].y;
+        boxs[1].tier = 2;
+        
+        boxs[2].minYTopBox = filteredBottom[Math.floor(filteredBottom.length * 0.10)].y;
+        boxs[2].maxYTopBox = filteredBottom[Math.floor(filteredBottom.length * 0.90)].y;
+        boxs[2].tier = 3;
+    }
     
     var plotboxs = plot.selectAll('rect')
         .data(boxs, function(box){return box.tier});
@@ -590,7 +595,7 @@ function drawGroupRectangle(filteredDataSet) {
         //     }
         // })
         .attr('x', 0)
-        .attr('y', 0)
+        .attr('y', h)
         .attr('width', 0)
         .attr('height', 0);
         

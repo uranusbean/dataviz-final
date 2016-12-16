@@ -176,11 +176,11 @@ header {
     border: 1px solid #8e8e8e;
 }
 
-a {
+.circleLegend a, .rectLegend a {
     color: black !important;
 }
 
-a:hover {
+.circleLegend a:hover, .rectLegend a:hover {
     text-decoration: none;
 }
 

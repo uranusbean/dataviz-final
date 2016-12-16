@@ -56,7 +56,7 @@
             </section>
              <div class = "legendExplain">
                 <div class="circleLegend">
-                    <span> Estimated monthly income of the host
+                    <span> Estimated Airbnb monthly income of the host
                         <a class="incomeTooltip" title="We can estimate Airbnb host monthly income based on the price per night, cleaning fee, minimum nights, and reviews per month.">
                             <i class="fa fa-question-circle" aria-hidden="true"></i>
                         </a>
@@ -66,7 +66,7 @@
                     <span><i class="fa fa-circle-thin fa-x" aria-hidden="true"></i> Lower than 50%</span>
                 </div>
                 <div class="rectLegend">
-                    <div class="rectLegendTitle">Clustered host area based on income
+                    <div class="rectLegendTitle">Clustered host area based on Airbnb income
                         <a class="clusterRectTooltip" title="Based on the Airbnb host monthly income, we divide all the hosts into 3 tiers: top 10% host group, top 10% to 50% host group, and lower than 50% host group. ">
                             <i class="fa fa-question-circle" aria-hidden="true"></i>
                         </a>
@@ -167,19 +167,22 @@
             The minimum night, price and number of reviews per month can be used 
             to esimate the monthly income for each listing. Some hosts may have 
             more than one listing, and this is how 'Calculated Host Listings' comes.
-            <p></p>
             The filter section on the righthand side contains 5 dimensions, including
             <b>Room Type, Cancellation Policy, Amenities, Family Pets, and Neighbourhood</b>.
             Each dimension includes a few filters. Each filter can be seen as a 
             <i><b>VARIABLE</b></i>.You can select or deselect any variable(s) to 
             compare and contrast the trend.
-            All the filters have been selected as default with the background color light grey. 
-            If deselecting any filter, the background of that filter will turn white. 
+            All the <span style="background: #b5b5b5; color: white; padding: 2px 5px">filters have been selected</span> as default with
+            <span style="background: #b5b5b5; color: white; padding: 2px 5px"> background in grey + text in white </span> . 
+            If <span style="background: white; color: #999; padding: 2px 5px; border-style: dotted">deselecting any filter</span>, 
+            it will turn into <span style="background: white; color: #999; padding: 2px 5px; border-style: dotted">background in white + text in grey</span>. 
             Multiple filters can be applied across dimensions. 
             Only one of the five dimensions can be used as color palette.
             For example, select minimum nights from X axis and price from Y axis, 
-            and use Room Type as color palette. You will see 1) the overall price 
-            of entire home will be higher than that of Private Room. 
+            and use Room Type as color palette. You will see at least 1) the overall 
+            price of entire home will be higher than that of Private Room. 2) an Airbnb 
+            host have higher chances to make more money when setting up 1-4 nights as 
+            minimum nights (through the clustered rectangles). 
             <p></p>
             
         </div>
