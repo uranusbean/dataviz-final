@@ -2,8 +2,9 @@ header {
     width: 100%;
     padding: 25px;
     padding-left: 10%;
-    background: #ff5a5f;
-    color: white;
+    background: #f1f1f1;
+    /*background: #ff5a5f;*/
+    color: #636363;
 }
 
 #subTitle{
@@ -15,7 +16,7 @@ header {
     /*padding-top: 20px;*/
 }
 
-.container h1 {
+.container h2 {
     margin-left: 5%;
     /*margin-bottom: 3%;*/
 }
